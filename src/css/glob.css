@@ -1,0 +1,37 @@
+html,
+body,
+#app {
+    height: 100%;
+    margin: 0;
+}
+
+.el-checkbox__input.is-disabled.is-checked .el-checkbox__inner::after {
+    border-color: #e95420;
+}
+
+.el-checkbox__input.is-disabled+span.el-checkbox__label {
+    color: rgb(110, 110, 110);
+}
+
+.el-step__title.is-finish {
+    color: #e95420;
+    ;
+}
+
+.el-step__head.is-finish {
+    color: #e95420;
+    ;
+    border-color: #e95420;
+}
+
+.list-group-item {
+    border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.el-card__header {
+    padding: 8px 8px;
+}
+
+.el-card__body {
+    padding: 3px 10px;
+}
