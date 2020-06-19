@@ -69,10 +69,9 @@ export default {
   },
   mounted() {
     //初始加载
-  
     this.drawLine();
     this.attach();
-   this.timedRefreshb();
+    this.timedRefreshb();
     //初始化视频
 
   },
@@ -139,7 +138,7 @@ export default {
           {
             //用id查询数据=>optionnn
             let myChartt = this.$echarts.init(this.$refs[item1.id][0]);
-            myChartt.clear()
+           myChartt.clear()
            myChartt.setOption(optionnn);
           }
         });

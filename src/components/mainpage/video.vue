@@ -43,7 +43,7 @@ export default {
     };
   },
   created() {
- //this.deviceMcreated()
+this.deviceMcreated()
   },
   mounted() {
   },

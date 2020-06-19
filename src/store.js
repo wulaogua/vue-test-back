@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
     state: {
+        datavhouer: false,
         lore: String(),
         projectnumb: Number(),
         projectId: String(),
@@ -28,6 +29,9 @@ const store = new Vuex.Store({
         },
     },
     mutations: {
+        datavhouerfun(state) {
+            state.datavhouer = !state.datavhouer
+        },
         allrestate(state) {
             state.lore = String(),
                 state.projectnumb = Number(),
