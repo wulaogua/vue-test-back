@@ -37,7 +37,7 @@ export default {
   data() {
     return {
       sonRefreshb: false,
-      activeName: "FX001",
+      activeName: "",
       chindredata: [],
       labedata: []
     };
@@ -73,7 +73,7 @@ this.deviceMcreated()
        { 
          this.labedata = res;
           this.activeName=res[0].machinekey;
-         this.secahdata();
+        // this.secahdata();
       }
     },
     async deviceMcreated() 
