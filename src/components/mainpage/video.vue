@@ -36,7 +36,7 @@ export default {
   },
   data() {
     return {
-      sonRefreshb: false,
+      sonRefreshb: true,
       activeName: "",
       chindredata: [],
       labedata: []
@@ -95,9 +95,7 @@ this.deviceMcreated()
         {
           this.writervideo(resVI3)
         }
-       
       }
-
     },
     tabdata(data) {
     /*   this.chindredata = data.name;

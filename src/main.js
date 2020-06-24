@@ -4,6 +4,8 @@ import router from './router'
 import store from './store'
 
 import ElementUI from 'element-ui'
+import VueIntro from 'vue-introjs';
+import 'intro.js/introjs.css';
 import axios from 'axios'
 import 'element-ui/lib/theme-chalk/index.css'
 import './css/glob.css'
@@ -12,10 +14,10 @@ import 'vue-orgchart/dist/style.min.css'
 import echarts from 'echarts'
 
 Vue.config.productionTip = false
-
 Vue.prototype.$echarts = echarts
 Vue.prototype.$http = axios
 Vue.use(ElementUI)
+Vue.use(VueIntro)
 
 axios.defaults.baseURL = "http://127.0.0.1:4000/api/"
     //请求头带上token
@@ -63,13 +65,6 @@ router.beforeEach(async(to, from, next) => {
         }
     }
 })
-
-/* new Vue({
-    router,
-    store,
-    render: h => h(App)
-}).$mount('#app')
- */
 new Vue({
     el: '#app',
     router,
