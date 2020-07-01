@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { turn } from 'core-js/fn/array'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
     state: {
+        loadingactive: false,
         datavhouer: false,
         lore: String(),
         projectnumb: Number(),
@@ -29,6 +31,12 @@ const store = new Vuex.Store({
         },
     },
     mutations: {
+        loadingactive(state) {
+            state.loadingactive = true;
+        },
+        loadingactiveF(state) {
+            state.loadingactive = false;
+        },
         datavhouerfun(state) {
             state.datavhouer = !state.datavhouer
         },

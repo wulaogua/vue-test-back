@@ -13,9 +13,9 @@
         <el-tabs v-model="activeName" tab-position="left" @tab-click="tabdata">
           <el-tab-pane
             v-for="citemtab in labedata"
-            :key="citemtab.machinekey"
-            :label="citemtab.nickname"
-            :name="citemtab.machinekey+''"
+            :key="citemtab.channelNo"
+            :label="citemtab.channelName"
+            :name="citemtab.channelName"
           ></el-tab-pane>
         </el-tabs>
       </el-col>
@@ -25,88 +25,171 @@
       </el-col>
     </el-row>
     <video id="video"></video>
+    <el-dialog
+      title="检测当前项目没有添加视频源"
+      :visible.sync="dialogVisible"
+      :before-close="handleClose"
+      width="30%"
+    >
+      <el-form
+        :model="formvideo"
+        label-width="100px"
+        class="demo-form"
+        v-if="elformVisible"
+        :rules="rules"
+        ref="videoForm"
+      >
+        <el-form-item label="AppKey" prop="AppKey">
+          <el-input v-model="formvideo.AppKey" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="Secret" prop="Secret">
+          <el-input v-model="formvideo.Secret" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('videoForm')">提交</el-button>
+          <el-button @click="dialogVisible = false">取消</el-button>
+          <el-button @click="elformVisible = false">帮助</el-button>
+        </el-form-item>
+      </el-form>
+      <div class="block" v-show="!elformVisible">
+        <el-button type="text" @click="elformVisible = true">返回</el-button>
+        <a href="https://open.ys7.com/" title="萤石云" target="_blank">跳转</a>
+        <el-carousel trigger="click" height="300px">
+          <el-carousel-item v-for="ii in imglist" :key="ii.id">
+            <span>{{ii.text}}</span>
+            <img :src="require(`../../assets/${ii.url}.png`)" alt="picture" />
+          </el-carousel-item>
+        </el-carousel>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
 import videoMain from "@/components/ThreeLevelPage/videoMain";
 import { mapState } from "vuex";
 export default {
-    computed: {
+  computed: {
     ...mapState(["projectnumb"])
   },
+  inject: ["reload"],
   data() {
+    
     return {
-      sonRefreshb: true,
+            imglist: [
+        {
+          id: 1,
+          url: "step1",
+          text: "1:登陆萤石云开放平台点击-开发者服务"
+        },
+        {
+          id: 2,
+          url: "step2",
+          text: "2:点击侧边栏的-我的账号-应用信息"
+        },
+        {
+          id: 3,
+          url: "step3",
+          text: "3:依次复制界面中的-Appkey-Secret粘贴到此页面"
+        }
+      ],
+      dialogVisible: false,
+      elformVisible: false,
+      formvideo: {
+        AppKey: "bc824dc91c664a1c8c2469a3c03e0f06",
+        Secret: "19ec4402541c7258cf51d4275db6f445"
+      },
+      rules: {
+        AppKey: [{ required: true, message: "请输入AppKey1", trigger: "blur" }],
+        Secret: [{ required: true, message: "请输入Secret", trigger: "blur" }]
+      },
+      sonRefreshb: false,
       activeName: "",
       chindredata: [],
       labedata: []
     };
   },
   created() {
-this.deviceMcreated()
+    this.seachvideourl();
+    //this.deviceMcreated();
   },
   mounted() {
+     this.$store.commit("loadingactiveF");
+  },
+  updated(){
+    //this.$store.commit("loadingactiveF");
   },
   methods: {
-    ////
-    /////
-   async secahdata()
-   {
-     const {data:res} = await this.$http.post("seachdata")
-     if(!res)
-     { 
-       this.$message.error('链接错误')
-       this.sonRefreshb = false;
-       /* return this.$message.error('链接错误'); */
-       }
-     else{
-       this.chindredata=res[0]
-       this.sonRefreshb = true;
-     }
+    resetForm() {
+      console.log("取消");
     },
-    writervideo(res){
-      if (!res)
-       {
-        return this.$message.error("错误");
+    handleClose(done) {
+      this.$confirm("确认关闭？")
+        .then(_ => {
+          done();
+        })
+        .catch(_ => {});
+    },
+    submitForm(data) {
+      this.$refs[data].validate(async valid => {
+        if (valid) {
+          const { data: data } = await this.$http.post("seachdata/seachvideo", {
+            AppKey: this.formvideo.AppKey,
+            Secret: this.formvideo.Secret,
+            projectnumb: this.$store.state.projectnumb
+          });
+          if (data.meta.status === 200) {
+            this.$message.success("查询成功");
+            this.dialogVisible = false;
+            this.$store.commit("loadingactive");
+            this.reload()
+          } 
+          else {
+            this.$message.error(data.meta.msg);
+          }
+        } 
+        else {
+          return false;
+        }
+      });
+    },
+    async seachvideourl() {
+      const { data:data } = await this.$http.post("seachdata/oneseachvideo",{'projectnumb':this.$store.state.projectnumb});
+      if (data.meta.status === 200) 
+      {
+        this.dialogVisible = false;
+        this.elformVisible = false;
+        this.labedata = data.data.videourl;
+        this.activeName = data.data.videourl[0].channelName
+        this.chindredata = data.data.videourl[0];
+        this.sonRefreshb = true;
+        //this.$store.commit("loadingactive");
       } 
-      else
-       { 
-         this.labedata = res;
-          this.activeName=res[0].machinekey;
-        // this.secahdata();
+      else {
+        this.dialogVisible = true;
+        this.elformVisible = true;
+        this.$message.error("加载错误");
+        return;
       }
     },
-    async deviceMcreated() 
-    {
-      if(this.$store.state.platedata===3)
-      {
-        const { data: resVI } = await this.$http.post("user/MachineSchOne", { data: this.$store.state.areadata}).catch(err => {this.$message.error("网络错误");
-        });
-        console.log(resVI)
-        if(resVI)
-        { 
-          this.writervideo(resVI)
-        }
-      }
-      else
-      {
-         const { data: resVI3 } = await this.$http.post("user/MachineSchAll", { data: this.projectnumb}).catch(err => {this.$message.error("网络错误"); });
-           if(resVI3)
+    tabdata(data,data1) {
+      this.labedata.every(item=>{
+        if(item.channelName===data.name)
         {
-          this.writervideo(resVI3)
+          this.chindredata = item;
+          return false
         }
-      }
-    },
-    tabdata(data) {
-    /*   this.chindredata = data.name;
+        else{
+          return true
+        }
+      })
       this.sonRefreshb = false;
       this.$nextTick(() => {
         this.sonRefreshb = true;
-      }); */
+      });
     }
   },
   components: {
-   videos: videoMain
+    videos: videoMain
   },
   destroyed() {
     clearInterval(this.timer);

@@ -5,6 +5,7 @@ import store from './store'
 
 import ElementUI from 'element-ui'
 import VueIntro from 'vue-introjs';
+import vueloading from 'vue-element-loading'
 import 'intro.js/introjs.css';
 import axios from 'axios'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -18,6 +19,7 @@ Vue.prototype.$echarts = echarts
 Vue.prototype.$http = axios
 Vue.use(ElementUI)
 Vue.use(VueIntro)
+Vue.component("vueloading", vueloading);
 
 axios.defaults.baseURL = "http://127.0.0.1:4000/api/"
     //请求头带上token

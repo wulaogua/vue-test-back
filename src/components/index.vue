@@ -36,6 +36,7 @@
         <!-- 主要显示区域 -->
         <el-main>
           <!-- 路由占位符号 -->
+           <vueloading class="vueloading" :active="this.$store.state.loadingactive" spinner="line-down" color="#ff6700" background-color="rgba(232,232,232,0.9)"/>
           <router-view></router-view>
         </el-main>
         <!-- 底部区域 -->
