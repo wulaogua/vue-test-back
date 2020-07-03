@@ -2,10 +2,12 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import VueParticles from 'vue-particles'
 
 import ElementUI from 'element-ui'
 import VueIntro from 'vue-introjs';
 import vueloading from 'vue-element-loading'
+
 import 'intro.js/introjs.css';
 import axios from 'axios'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -19,6 +21,7 @@ Vue.prototype.$echarts = echarts
 Vue.prototype.$http = axios
 Vue.use(ElementUI)
 Vue.use(VueIntro)
+Vue.use(VueParticles)
 Vue.component("vueloading", vueloading);
 
 axios.defaults.baseURL = "http://127.0.0.1:4000/api/"

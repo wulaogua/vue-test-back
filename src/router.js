@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 /* import Home from './views/Home.vue' */
 import index from '@/components/index'
+import daping from '@/components/daping'
 import newporject from '@/components/newporject'
 import login from '@/components/login'
 import error from '@/components/404'
@@ -166,6 +167,11 @@ const router = new Router({
             path: '/error1',
             name: 'error1',
             component: error1,
+        },
+        {
+            path: '/dp',
+            name: 'daping',
+            component: daping,
         }
     ]
 })
