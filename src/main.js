@@ -8,6 +8,7 @@ import ElementUI from 'element-ui'
 import VueIntro from 'vue-introjs';
 import vueloading from 'vue-element-loading'
 
+import datavV from '@jiaminghi/data-view'
 import 'intro.js/introjs.css';
 import axios from 'axios'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -22,6 +23,7 @@ Vue.prototype.$http = axios
 Vue.use(ElementUI)
 Vue.use(VueIntro)
 Vue.use(VueParticles)
+Vue.use(datavV)
 Vue.component("vueloading", vueloading);
 
 axios.defaults.baseURL = "http://127.0.0.1:4000/api/"
