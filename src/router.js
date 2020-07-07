@@ -22,27 +22,11 @@ import plate from '@/components/plate'
 import chinddata from '@/components/mainpage/chinddata'
 import chinddat3 from '@/components/mainpage/chindtest3'
 import zonglan from '@/components/mainpage/zonglan'
-
-/* Vue.use(Router)
-
-export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: Home
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-    //  component: () => import( webpackChunkName: "about" './views/About.vue')
-    }
-  ]
-}) */
 Vue.use(Router)
+    /* const originalPush = Router.prototype.push
+    Router.prototype.push = function push(location) {
+        return originalPush.call(this, location).catch(err => err)
+    } */
 const router = new Router({
     routes: [{
             path: '/',

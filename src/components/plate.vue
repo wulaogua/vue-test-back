@@ -232,6 +232,7 @@ export default {
               areaname: item.name
             });
             this.$store.commit("addpjecnum", pronumb.data[0].projectnumb);
+            this.$store.commit("addheardname",this.Dardlist[0].name);
             this.$store.commit("addplatedata", 2);
             this.$router.push("/index");
           } else {

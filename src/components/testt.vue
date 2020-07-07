@@ -59,12 +59,17 @@ export default {
       UpLevelForm: [],
       listform: [],
       list1: [
-        { name: "片区1", id: 51 },
-        { name: "片区2", id: 61 },
-        { name: "片区3", id: 71 },
-        { name: "片区4", id: 72 },
-        { name: "片区5", id: 73 },
-        { name: "片区6", id: 74 }
+        { name: "槽1", id: 51 },
+        { name: "槽2", id: 61 },
+        { name: "槽3", id: 71 },
+        { name: "槽4", id: 72 },
+        { name: "槽5", id: 73 },
+        { name: "槽6", id: 74 },
+        { name: "槽7", id: 75 },
+        { name: "槽8", id: 76 },
+        { name: "1号点", id: 77 },
+        { name: "2号点", id: 78 },
+        { name: "3号点", id: 79 },
       ]
     };
   },

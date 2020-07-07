@@ -3,7 +3,7 @@
     <!-- 头部区域 -->
     <el-header>
       <div>
-        <span>物联网后台</span>
+        <span>{{heardname}}物联网后台</span>
       </div>
       <el-button type="info" @click="loginout()">退出</el-button>
     </el-header>
@@ -50,6 +50,7 @@
 export default {
   data() {
     return {
+      heardname:this.$store.state.heardname,
       isCollapse: false,
       activePath: ""
     };

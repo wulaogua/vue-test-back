@@ -6,6 +6,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
     state: {
+        heardname: '',
         loadingactive: false,
         datavhouer: false,
         lore: String(),
@@ -31,6 +32,9 @@ const store = new Vuex.Store({
         },
     },
     mutations: {
+        addheardname(state, key) {
+            state.heardname = key;
+        },
         loadingactive(state) {
             state.loadingactive = true;
         },
