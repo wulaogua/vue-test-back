@@ -7,16 +7,16 @@
     <el-divider class="dividermarg"></el-divider>
     <el-row :gutter="12">
       <!--卡片视图 -->
-      <el-col :span="5" v-for="citem in Cardlist" :key="citem.id" :index="citem.id +''">
-        <el-card class="card" :style="{background:cardcolor[citem.id]}">
+      <el-col :span="4" v-for="citem in Cardlist" :key="citem.id" :index="citem.id +''">
+        <el-card class="card" :style="{background:cardcolor[citem.name]}">
           <el-row type="flex" align="middle">
             <el-col :span="5" class="iconsize">
-              <i :class="CiconObj[citem.id]"></i>
+              <i :class="CiconObj[citem.name]"></i>
             </el-col>
             <el-col :span="19" align="center">
               <div class="fontsize">
-                <span>{{citem.CardName}}</span>
-                <div>{{citem.CardCData}} {{cardfuhao[citem.id]}}</div>
+                <span>{{citem.nikename}}</span>
+                <div>{{citem.data}} {{cardfuhao[citem.name]}}</div>
               </div>
             </el-col>
           </el-row>
@@ -30,11 +30,10 @@
           <i class="el-icon-data-analysis" @click="datashowfun()"></i>
         </div>
         <el-divider class="dividermarg"></el-divider>
-        <el-table :data="tableData" stripe style="width: 100%" height="450" v-if="!dataShow">
-          <el-table-column prop="udid" label="传感器编号" width="180"></el-table-column>
-          <el-table-column prop="name" label="设备名称" width="180"></el-table-column>
-          <el-table-column prop="udata" label="数据"></el-table-column>
-          <el-table-column prop="date" label="时间"></el-table-column>
+       <el-table :data="tableData" stripe style="width: 100%" height="450" v-if="!dataShow">
+          <el-table-column   label="时间" width="230">{{message.date}}</el-table-column>
+          <el-table-column prop="nikename" label="设备名称" width="200"></el-table-column>
+          <el-table-column prop="data" label="数据"></el-table-column>
         </el-table>
         <div id="ech" class="block" ref="echer" v-show="dataShow"></div>
       </el-col>
@@ -66,96 +65,71 @@ export default {
       myChart1: "",
       dataShow: this.$store.state.datavhouer,
       dasd: this.message,
-      tableData: [
-        {
-          udid: 12,
-          date: "2016-05-02",
-          name: "温度传感器",
-          udata: 100
-        },
-        {
-          udid: 13,
-          date: "2016-05-02",
-          name: "湿度传感器",
-          udata: 100
-        },
-        {
-          udid: 14,
-          date: "2016-05-02",
-          name: "光照传感器",
-          udata: 100
-        },
-        {
-          udid: 15,
-          date: "2016-05-02",
-          name: "传感器",
-          udata: 100
-        },
-        {
-          udid: 15,
-          date: "2016-05-02",
-          name: "传感器",
-          udata: 100
-        },
-        {
-          udid: 15,
-          date: "2016-05-02",
-          name: "传感器",
-          udata: 100
-        },
-        {
-          udid: 15,
-          date: "2016-05-02",
-          name: "传感器",
-          udata: 100
-        },
-        {
-          udid: 15,
-          date: "2016-05-02",
-          name: "传感器",
-          udata: 100
-        },
-        {
-          udid: 15,
-          date: "2016-05-02",
-          name: "传感器",
-          udata: 100
-        },
-        {
-          udid: 15,
-          date: "2016-05-02",
-          name: "传感器",
-          udata: 100
-        }
-      ],
+      tableData: [],
       tChangdata: [],
       dangqianName: "",
       value2: "",
       dialogFormVisible: false,
       Cardlist: [],
       CiconObj: {
-        "10": "el-icon-sunny",
-        "11": "el-icon-heavy-rain",
-        "12": "el-icon-cloudy",
-        "13": "el-icon-heavy-rain",
-        "14": "el-icon-ship",
-        "15": "el-icon-moon",
-        "16": "el-icon-fork-spoon"
+        "tair1": "iconfont icon-wendu",
+        "tair2": "iconfont icon-wendu",
+        "tair3": "iconfont icon-wendu",
+        "airhumidity1": "iconfont icon-IOTtubiao_huabanfuben",
+        "airhumidity2": "iconfont icon-IOTtubiao_huabanfuben",
+        "airhumidity3": "iconfont icon-IOTtubiao_huabanfuben",
+        "Soiltemp1": "iconfont icon-turangwendu",
+        "Soiltemp2": "iconfont icon-turangwendu",
+        "Soiltemp3": "iconfont icon-turangwendu",
+        "soilmoisture1": "iconfont icon-turangshidu",
+        "soilmoisture2": "iconfont icon-turangshidu",
+        "soilmoisture3": "iconfont icon-turangshidu",
+        "soi1":"iconfont icon-guangzhao",
+        "soi2":"iconfont icon-guangzhao",
+        "soi3":"iconfont icon-guangzhao",
+        "co21":"iconfont icon-icon-co",
+        "co22":"iconfont icon-icon-co",
+        "co23":"iconfont icon-icon-co",
       },
       cardcolor: {
-        "10": "#4444",
-        "11": "gold",
-        "12": "green",
-        "13": "blueviolet",
-        "14": "#1824",
-        "15": "blueviolet",
-        "16": "gold"
+        "tair1": "#35C0CD",
+        "tair2": "#5EC4CD",
+        "tair3": "#1E6D74",
+        "airhumidity1": "#0B5FA5",
+        "airhumidity2": "#25547B",
+        "airhumidity3": "#66A1D2",
+        "Soiltemp1": "#ff7400",
+        "Soiltemp2": "#ff9640",
+        "Soiltemp3": "#BF7130",
+        "soilmoisture1": "#A64B00",
+        "soilmoisture2": "#ffB273",
+        "soilmoisture3": "#A65400",
+        "soi1":"#ff4500",
+        "soi2":"#ffDE00",
+        "soi3":"#ff9973",
+        "co21":"#84E900",
+        "co22":"#A4F43D",
+        "co23":"#37DC74",
       },
       cardfuhao: {
-        "10": "℃",
-        "11": "%",
-        "12": "LUX",
-        "13": "ml"
+        "tair1": "℃",
+        "tair2": "℃",
+        "tair3": "℃",
+        "airhumidity1": "%",
+        "airhumidity2": "%",
+        "airhumidity3": "%",
+        "Soiltemp1": "℃",
+        "Soiltemp2": "℃",
+        "Soiltemp3": "℃",
+        "soilmoisture1": "%",
+        "soilmoisture2": "%",
+        "soilmoisture3": "%",
+        "soi1":"LUX",
+        "soi2":"LUX",
+        "soi3":"LUX",
+        "co21":"ppm",
+        "co22":"ppm",
+        "co23":"ppm",
       },
       sensordata_10: [
         ["2000-06-05", 116],
@@ -546,56 +520,25 @@ export default {
           }
         ]
       },
-      myChart: ""
+      myChart: "",
     };
   },
   created() {
-    this.nowdateO = this.message.time;
-    this.creatdatas();
+    this.nowdateO = this.message.date;
+    this.Cardlist= this.message.value;
+    this.tableData= this.message.value;
   },
   mounted() {
     this.myChart = this.$echarts.init(this.$refs.echer);
     this.drawLine();
   },
   methods: {
+    biaogedata(){
+     const data = this.$http.post('seachdata/24houer',{'machinekey':this.message.machinekey}) 
+    },
     //卡片
     creatdatas() {
-      let tair = new Object(); //温度
-      tair.id = 10;
-      tair.CardName = "空气温度";
-      tair.CardCData = this.message.tair;
-      //
-      let airhumidity = new Object(); //湿度
-      airhumidity.id = 11;
-      airhumidity.CardName = "空气湿度";
-      airhumidity.CardCData = this.message.airhumidity;
-      //
-      let Soiltemp = new Object(); //土壤温度
-      Soiltemp.id = 12;
-      Soiltemp.CardName = "土壤温度";
-      Soiltemp.CardCData = this.message.Soiltemp;
-      //
-      let soilmoisture = new Object(); //土壤湿度
-      soilmoisture.id = 13;
-      soilmoisture.CardName = "土壤湿度";
-      soilmoisture.CardCData = this.message.soilmoisture;
-      //
-      let soi = new Object(); //光照强度
-      soi.id = 14;
-      soi.CardName = "光照强度";
-      soi.CardCData = this.message.soi;
-      let rainfall = new Object(); //降雨量
-      rainfall.id = 15;
-      rainfall.CardName = "降雨量";
-      rainfall.CardCData = this.message.rainfall;
-      this.Cardlist.push(
-        tair,
-        airhumidity,
-        Soiltemp,
-        soilmoisture,
-        soi,
-        rainfall
-      );
+      console.log(this.Cardlist)
     },
     //切换
     datashowfun() {
@@ -624,7 +567,9 @@ export default {
     padding: 0;
   }
 }
-
+.iconfont{
+  font-size: 30px;
+}
 .el-header {
   height: 0px;
 }
@@ -633,7 +578,7 @@ export default {
   color: aliceblue;
 }
 .iconsize {
-  font-size: 50px;
+  //font-size: 50px;
   color: aliceblue;
 }
 .toggle-button {

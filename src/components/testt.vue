@@ -67,9 +67,13 @@ export default {
         { name: "槽6", id: 74 },
         { name: "槽7", id: 75 },
         { name: "槽8", id: 76 },
-        { name: "1号点", id: 77 },
-        { name: "2号点", id: 78 },
-        { name: "3号点", id: 79 },
+        { name: "1号dp", id: 77 },
+        { name: "2号dp", id: 78 },
+        { name: "3号dp", id: 79 },
+         {name: "4号dp", id: 80 },
+          {name: "5号dp", id: 81 },
+           {name: "qixaign", id: 82 },
+        
       ]
     };
   },

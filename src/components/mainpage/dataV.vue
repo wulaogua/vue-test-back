@@ -45,7 +45,7 @@ export default {
     this.deviceMcreated();
   },
   mounted() {
-    this.timedRefreshb();
+    //this.timedRefreshb();
   },
   methods: {
     //定时刷新
@@ -66,12 +66,14 @@ export default {
       if (!res) {
         this.$message.error("链接错误");
         this.sonRefreshb = false;
+        return;
         /* return this.$message.error('链接错误'); */
       } else {
-        this.chindredata = res[0];
+        this.chindredata = res;
         this.sonRefreshb = false;
         this.$nextTick(() => {
           this.sonRefreshb = true;
+          this.chindredata = res;
         });
       }
     },
@@ -95,7 +97,12 @@ export default {
         if (resV) {
           this.writerdataV(resV);
         }
-      } else {
+        else{
+          return false;
+        }
+      } 
+      else 
+      {
         const { data: resV3 } = await this.$http
           .post("user/MachineSchAll", { data: this.projectnumb })
           .catch(err => {
@@ -103,6 +110,9 @@ export default {
           });
         if (resV3) {
           this.writerdataV(resV3);
+        }
+        else{
+          return false;
         }
       }
     },
