@@ -26,12 +26,12 @@
     <el-row :gutter="20">
       <el-col :span="20">
         <div>
-          <span>24小时数据</span>
+          <span>小时数据</span>
           <i class="el-icon-data-analysis" @click="datashowfun()"></i>
         </div>
         <el-divider class="dividermarg"></el-divider>
        <el-table :data="tableData" stripe style="width: 100%" height="450" v-if="!dataShow">
-          <el-table-column   label="时间" width="230">{{message.date}}</el-table-column>
+          <el-table-column  prop="date" label="时间" width="230"></el-table-column>
           <el-table-column prop="nikename" label="设备名称" width="200"></el-table-column>
           <el-table-column prop="data" label="数据"></el-table-column>
         </el-table>
@@ -62,13 +62,9 @@ export default {
     return {
       creatdata: new Array(),
       nowdateO: "",
-      myChart1: "",
       dataShow: this.$store.state.datavhouer,
       dasd: this.message,
       tableData: [],
-      tChangdata: [],
-      dangqianName: "",
-      value2: "",
       dialogFormVisible: false,
       Cardlist: [],
       CiconObj: {
@@ -131,143 +127,8 @@ export default {
         "co22":"ppm",
         "co23":"ppm",
       },
-      sensordata_10: [
-        ["2000-06-05", 116],
-        ["2000-06-06", 129],
-        ["2000-06-07", 135],
-        ["2000-06-08", 86],
-        ["2000-06-09", 73],
-        ["2000-06-10", 85],
-        ["2000-06-11", 73],
-        ["2000-06-12", 68],
-        ["2000-06-13", 92],
-        ["2000-06-14", 130],
-        ["2000-06-15", 245],
-        ["2000-06-16", 139],
-        ["2000-06-17", 115],
-        ["2000-06-18", 111],
-        ["2000-06-19", 309],
-        ["2000-06-20", 206],
-        ["2000-06-21", 137],
-        ["2000-06-22", 128],
-        ["2000-06-23", 85],
-        ["2000-06-24", 94],
-        ["2000-06-25", 71],
-        ["2000-06-26", 106],
-        ["2000-06-27", 84],
-        ["2000-06-28", 93],
-        ["2000-06-29", 85],
-        ["2000-06-30", 73],
-        ["2000-07-01", 83],
-        ["2000-07-02", 125],
-        ["2000-07-03", 107],
-        ["2000-07-04", 82],
-        ["2000-07-05", 44],
-        ["2000-07-06", 72],
-        ["2000-07-07", 106],
-        ["2000-07-08", 107],
-        ["2000-07-09", 66],
-        ["2000-07-10", 91],
-        ["2000-07-11", 92],
-        ["2000-07-12", 113],
-        ["2000-07-13", 107],
-        ["2000-07-14", 131],
-        ["2000-07-15", 111],
-        ["2000-07-16", 64],
-        ["2000-07-17", 69],
-        ["2000-07-18", 88],
-        ["2000-07-19", 77],
-        ["2000-07-20", 83],
-        ["2000-07-21", 111],
-        ["2000-07-22", 57],
-        ["2000-07-23", 55],
-        ["2000-07-24", 60]
-      ],
-      sensordata_11: [
-        ["2000-06-05", 6],
-        ["2000-06-06", 9],
-        ["2000-06-07", 5],
-        ["2000-06-08", 6],
-        ["2000-06-09", 3],
-        ["2000-06-10", 85],
-        ["2000-06-11", 73],
-        ["2000-06-12", 68],
-        ["2000-06-13", 92],
-        ["2000-06-14", 0],
-        ["2000-06-15", 0],
-        ["2000-06-16", 0],
-        ["2000-06-17", 115],
-        ["2000-06-18", 111],
-        ["2000-06-19", 0],
-        ["2000-06-20", 0],
-        ["2000-06-21", 137],
-        ["2000-06-22", 128],
-        ["2000-06-23", 85],
-        ["2000-06-24", 94],
-        ["2000-06-25", 71],
-        ["2000-06-26", 106],
-        ["2000-06-27", 84],
-        ["2000-06-28", 93],
-        ["2000-06-29", 85],
-        ["2000-06-30", 73],
-        ["2000-07-01", 83],
-        ["2000-07-02", 0],
-        ["2000-07-03", 107],
-        ["2000-07-04", 82],
-        ["2000-07-05", 44],
-        ["2000-07-06", 72],
-        ["2000-07-07", 106],
-        ["2000-07-08", 107],
-        ["2000-07-09", 66],
-        ["2000-07-10", 91],
-        ["2000-07-11", 92],
-        ["2000-07-12", 113],
-        ["2000-07-13", 107],
-        ["2000-07-14", 131],
-        ["2000-07-15", 111],
-        ["2000-07-16", 64],
-        ["2000-07-17", 69],
-        ["2000-07-18", 88],
-        ["2000-07-19", 77],
-        ["2000-07-20", 83],
-        ["2000-07-21", 111],
-        ["2000-07-22", 57],
-        ["2000-07-23", 55],
-        ["2000-07-24", 60]
-      ],
       show: false,
-      showlindata: {},
-      pickerOptions: {
-        shortcuts: [
-          {
-            text: "最近一周",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit("pick", [start, end]);
-            }
-          },
-          {
-            text: "最近一个月",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit("pick", [start, end]);
-            }
-          },
-          {
-            text: "最近三个月",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit("pick", [start, end]);
-            }
-          }
-        ]
-      },
+      biaodata:[],
       option: {
         title: {
           text: "数据折线图"
@@ -281,7 +142,7 @@ export default {
             "土壤湿度",
             "大气温度",
             "大气湿度",
-            "光照强度",
+            "光照强度X10",
             "CO2浓度"
           ]
         },
@@ -333,7 +194,6 @@ export default {
           {
             name: "土壤温度",
             type: "line",
-
             data: [
               24,
               23,
@@ -364,7 +224,6 @@ export default {
           {
             name: "土壤湿度",
             type: "line",
-
             data: [
               86,
               74,
@@ -395,7 +254,6 @@ export default {
           {
             name: "大气温度",
             type: "line",
-
             data: [
               20,
               30,
@@ -415,18 +273,11 @@ export default {
               25,
               30,
               22,
-              21,
-              20,
-              28,
-              24,
-              18,
-              22
             ]
           },
           {
             name: "大气湿度",
             type: "line",
-
             data: [
               30,
               27,
@@ -457,11 +308,10 @@ export default {
           {
             name: "光照强度X10",
             type: "line",
-
             data: [
-              16,
-              21,
-              38,
+              '',
+              '',
+              '',
               35,
               35,
               18,
@@ -488,7 +338,6 @@ export default {
           {
             name: "CO2浓度",
             type: "line",
-
             data: [
               14,
               8,
@@ -521,20 +370,24 @@ export default {
         ]
       },
       myChart: "",
+      
     };
   },
   created() {
     this.nowdateO = this.message.date;
     this.Cardlist= this.message.value;
-    this.tableData= this.message.value;
+    this.biaogedata()
   },
   mounted() {
     this.myChart = this.$echarts.init(this.$refs.echer);
     this.drawLine();
   },
   methods: {
-    biaogedata(){
-     const data = this.$http.post('seachdata/24houer',{'machinekey':this.message.machinekey}) 
+   async biaogedata(){
+     const {data} =await this.$http.post('seachdata/24houer',{'machinekey':this.message.machinekey})
+     console.log(data)
+     this.tableData= data[0];
+     this.biaodata=data[1]
     },
     //卡片
     creatdatas() {
