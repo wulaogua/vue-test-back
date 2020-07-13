@@ -60,7 +60,6 @@ export default {
     },
     //查询
     async secahdata() {
-<<<<<<< HEAD
       if (this.activeName === "FX050") {
         const { data: res } = await this.$http.post("seach/qixiangzhan");
         
@@ -80,22 +79,6 @@ export default {
       } else {
         const { data: res } = await this.$http.post("seachdataOne", {
           machinekey: this.activeName
-=======
-      const { data: res } = await this.$http.post("seachdataOne", {
-        machinekey: this.activeName
-      });
-      if (!res) {
-        this.$message.error("链接错误");
-        this.sonRefreshb = false;
-        return;
-        /* return this.$message.error('链接错误'); */
-      } else {
-        this.chindredata = res;
-        this.sonRefreshb = false;
-        this.$nextTick(() => {
-          this.sonRefreshb = true;
-          this.chindredata = res;
->>>>>>> e631f7abcf875c8c141837e425a9de15c6b9720f
         });
         if (!res) {
           this.$message.error("链接错误");
@@ -134,9 +117,6 @@ export default {
         } else {
           return false;
         }
-        else{
-          return false;
-        }
       } 
       else 
       {
@@ -148,9 +128,6 @@ export default {
         if (resV3) {
           this.writerdataV(resV3);
         } else {
-          return false;
-        }
-        else{
           return false;
         }
       }
