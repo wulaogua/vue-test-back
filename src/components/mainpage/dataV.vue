@@ -55,24 +55,44 @@ export default {
       } else {
         this.timer = setInterval(() => {
           this.secahdata();
-        }, 10000);
+        }, 30000);
       }
     },
     //查询
     async secahdata() {
-      const { data: res } = await this.$http.post("seachdataOne", {
-        machinekey: this.activeName
-      });
-      if (!res) {
-        this.$message.error("链接错误");
-        this.sonRefreshb = false;
-        /* return this.$message.error('链接错误'); */
+      if (this.activeName === "FX050") {
+        const { data: res } = await this.$http.post("seach/qixiangzhan");
+        
+        if (!res) {
+          this.$message.error("链接错误");
+          this.sonRefreshb = false;
+          return;
+          /* return this.$message.error('链接错误'); */
+        } else {
+          this.chindredata = res;
+          this.sonRefreshb = false;
+          this.$nextTick(() => {
+            this.sonRefreshb = true;
+            this.chindredata = res;
+          });
+        }
       } else {
-        this.chindredata = res[0];
-        this.sonRefreshb = false;
-        this.$nextTick(() => {
-          this.sonRefreshb = true;
+        const { data: res } = await this.$http.post("seachdataOne", {
+          machinekey: this.activeName
         });
+        if (!res) {
+          this.$message.error("链接错误");
+          this.sonRefreshb = false;
+          return;
+          /* return this.$message.error('链接错误'); */
+        } else {
+          this.chindredata = res;
+          this.sonRefreshb = false;
+          this.$nextTick(() => {
+            this.sonRefreshb = true;
+            this.chindredata = res;
+          });
+        }
       }
     },
     writerdataV(res) {
@@ -94,6 +114,8 @@ export default {
           });
         if (resV) {
           this.writerdataV(resV);
+        } else {
+          return false;
         }
       } else {
         const { data: resV3 } = await this.$http
@@ -103,6 +125,8 @@ export default {
           });
         if (resV3) {
           this.writerdataV(resV3);
+        } else {
+          return false;
         }
       }
     },

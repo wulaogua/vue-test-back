@@ -7,7 +7,7 @@
         <div class="Block1">
           <el-row>
             <el-col :span="4" :push="1">
-              <i :style="styleObject" :class="classA" class="el-icon-video-play"></i>
+              <i :style="styleObject"  class="el-icon-video-play"></i>
             </el-col>
             <el-col :span="4" :push="1">
               <div>

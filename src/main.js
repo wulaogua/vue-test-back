@@ -26,7 +26,7 @@ Vue.use(VueParticles)
 Vue.use(datavV)
 Vue.component("vueloading", vueloading);
 
-axios.defaults.baseURL = "http://192.168.2.204:4000/api/"
+axios.defaults.baseURL = "http://39.99.205.217:4000/api/"
     //请求头带上token
 axios.interceptors.request.use(
     config => {
