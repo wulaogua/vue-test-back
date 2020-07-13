@@ -55,32 +55,11 @@ export default {
       } else {
         this.timer = setInterval(() => {
           this.secahdata();
-        }, 30000);
+        }, 10000);
       }
     },
     //查询
     async secahdata() {
-<<<<<<< HEAD
-      if (this.activeName === "FX050") {
-        const { data: res } = await this.$http.post("seach/qixiangzhan");
-        
-        if (!res) {
-          this.$message.error("链接错误");
-          this.sonRefreshb = false;
-          return;
-          /* return this.$message.error('链接错误'); */
-        } else {
-          this.chindredata = res;
-          this.sonRefreshb = false;
-          this.$nextTick(() => {
-            this.sonRefreshb = true;
-            this.chindredata = res;
-          });
-        }
-      } else {
-        const { data: res } = await this.$http.post("seachdataOne", {
-          machinekey: this.activeName
-=======
       const { data: res } = await this.$http.post("seachdataOne", {
         machinekey: this.activeName
       });
@@ -95,21 +74,7 @@ export default {
         this.$nextTick(() => {
           this.sonRefreshb = true;
           this.chindredata = res;
->>>>>>> e631f7abcf875c8c141837e425a9de15c6b9720f
         });
-        if (!res) {
-          this.$message.error("链接错误");
-          this.sonRefreshb = false;
-          return;
-          /* return this.$message.error('链接错误'); */
-        } else {
-          this.chindredata = res;
-          this.sonRefreshb = false;
-          this.$nextTick(() => {
-            this.sonRefreshb = true;
-            this.chindredata = res;
-          });
-        }
       }
     },
     writerdataV(res) {
@@ -131,8 +96,6 @@ export default {
           });
         if (resV) {
           this.writerdataV(resV);
-        } else {
-          return false;
         }
         else{
           return false;
@@ -147,8 +110,6 @@ export default {
           });
         if (resV3) {
           this.writerdataV(resV3);
-        } else {
-          return false;
         }
         else{
           return false;
