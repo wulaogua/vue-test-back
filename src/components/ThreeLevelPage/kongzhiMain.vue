@@ -66,19 +66,18 @@
 
                 <div style="text-align:center;line-height:45px" v-if="c.value===1">
                   <el-radio-group v-model="c.status" size="mini" @change="singledevice(c)">
-                    <el-radio-button label=1 >开</el-radio-button>
-                    <el-radio-button label=2>关</el-radio-button>
+                    <el-radio-button label=1 :loading="true" >开</el-radio-button>
+                    <el-radio-button label=2 :loading="true" >关</el-radio-button>
                   </el-radio-group>
                 </div>
 
                 <div style="text-align:center;line-height:45px" v-if="c.value===2">
                   <el-radio-group v-model="c.status" size="mini" @change="doubledevice(c)">
-                    <el-radio-button label=1>左</el-radio-button>
-                    <el-radio-button label=2>停</el-radio-button>
-                    <el-radio-button label=3>右</el-radio-button>
+                    <el-radio-button label=1  :loading="true" >左</el-radio-button>
+                    <el-radio-button label=2  :loading="true" >停</el-radio-button>
+                    <el-radio-button label=3 :loading="true" >右</el-radio-button>
                   </el-radio-group>
                 </div>
-
                 <div class="block" v-if="c.value===3">
                 <div>值：{{c.Nvalue}}</div>
                   <el-slider v-model="c.Nvalue" @change="adjustdevice(c)"></el-slider>

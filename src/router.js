@@ -111,12 +111,12 @@ const router = new Router({
                     component: video,
                     meta: { role: "admin", auth: true, keepAlive: true, typenub: [1, 2, 3] }
                 },
-                {
+               /*  {
                     path: '/zonglan',
                     name: 'zonglan',
                     component: zonglan,
                     meta: { role: "admin", auth: true, keepAlive: true, typenub: [1, 2, 3] }
-                },
+                }, */
             ]
         },
         {
