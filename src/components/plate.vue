@@ -99,7 +99,7 @@ export default {
       Dardlist: Array(), //多重树 名称
       test: false,
       myChart: undefined,
-      tree_ele: undefined
+      tree_ele: undefined,
     };
   },
   created() {},
