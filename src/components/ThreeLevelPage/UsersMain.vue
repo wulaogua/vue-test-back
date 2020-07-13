@@ -25,10 +25,29 @@
     </el-row>
     <el-row :gutter="20">
       <el-col :span="20">
-        <div>
-          <span>小时数据</span>
-          <i class="el-icon-data-analysis" @click="datashowfun()"></i>
-        </div>
+        <el-row class="biaotoushijian">
+          <el-col :span="3" >
+            <span>小时数据</span>
+            <i class="el-icon-data-analysis" @click="datashowfun()"></i>
+          </el-col>
+          <el-col :span="2" style="text-align: right;">
+            <span>选择时间：</span>
+          </el-col>
+          <el-col :span="9">
+            <el-date-picker
+              v-model="value2"
+              type="datetimerange"
+              :picker-options="pickerOptions"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              align="right"
+            ></el-date-picker>
+          </el-col>
+          <el-col :span="2">
+            <el-button @click="seachdata()">查询</el-button>
+          </el-col>
+        </el-row>
         <el-divider class="dividermarg"></el-divider>
         <el-table :data="tableData" stripe style="width: 100%" height="450" v-show="!dataShow">
           <el-table-column prop="date" label="时间" width="280"></el-table-column>
@@ -60,6 +79,38 @@ export default {
   },
   data() {
     return {
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近三个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            }
+          }
+        ]
+      },
+      value2: "",
       creatdata: new Array(),
       nowdateO: "",
       dataShow: this.$store.state.datavhouer,
@@ -133,11 +184,84 @@ export default {
         fengsu: "m/s",
         fengxiang: "°"
       },
+      xzdateh:[],
       show: false,
       biaodata: [],
       show: false,
-      biaodata:[],
-      option: {
+      biaodata: ['','','','','',''],
+      option: {},
+      myChart: "",
+      qixiangzhandata: {}
+    };
+  },
+  created() {
+    if (!this.message.machinekey) {
+      this.qixiangzhan();
+    } else {
+      this.nowdateO = this.message.date;
+      this.Cardlist = this.message.value;
+      //this.biaogedata();
+    }
+  },
+  mounted() {
+    this.myChart = this.$echarts.init(this.$refs.echer);
+    //this.drawLine();
+  },
+  methods: {
+    seachdata(){
+      let fdate =this.value2[0].toLocaleString('chinese',{hour12:false}).split('/').join('-')
+      let sdate = this.value2[1].toLocaleString('chinese',{hour12:false}).split('/').join('-')
+      this.biaogedata(fdate,sdate)
+    },
+    async qixiangzhan() {
+      this.qixiangzhandata = {
+        date: this.message.time,
+        value: [
+          {
+            data: this.message.airhumidity1,
+            nikename: "空气湿度",
+            name: "airhumidity1"
+          },
+          { data: this.message.tair1, nikename: "空气温度", name: "tair1" },
+          { data: this.message.soi1, nikename: "光照强度", name: "soi1" },
+          { data: this.message.fengsu, nikename: "风速", name: "fengsu" },
+          { data: this.message.fengxiang, nikename: "风向", name: "fengxiang" }
+        ]
+      };
+      this.Cardlist = this.qixiangzhandata.value;
+      const { data } = await this.$http.post("seachdata/qx24houer");
+      this.tableData = data;
+    },
+    async biaogedata(fdate,sdate) {
+      const { data } = await this.$http.post("seachdata/24houer", {
+        machinekey: this.message.machinekey,
+        fdate:fdate,
+        sdate:sdate
+      });
+      if (data) {
+        this.tableData = data[0];
+        this.biaodata = data[1];
+        this.xzdateh = data[2];
+        this.drawLine();
+        
+      } else {
+        this.$message.error("获取错误");
+      }
+    },
+    //卡片
+    creatdatas() {},
+    //切换
+    datashowfun() {
+      this.$store.commit("datavhouerfun");
+      if (this.$store.state.datavhouer) {
+        this.myChart.clear();
+        this.myChart.setOption(this.option);
+      }
+    },
+    //画曲线
+    drawLine() {
+      // 窗口大小自适应方案
+     this.option =  {
         title: {
           text: "数据折线图"
         },
@@ -169,31 +293,7 @@ export default {
         xAxis: {
           type: "category",
           boundaryGap: false,
-          data: [
-            "0",
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "10",
-            "11",
-            "12",
-            "13",
-            "14",
-            "15",
-            "18",
-            "19",
-            "20",
-            "21",
-            "22",
-            "23",
-            "24"
-          ]
+          data: this.xzdateh
         },
         yAxis: {
           type: "value"
@@ -202,105 +302,49 @@ export default {
           {
             name: "土壤温度（平均）",
             type: "line",
-            data: [, , , , , , , , , , 26.8, 27.5,28, 28.4, 28.4, , , , , , , , ,]
+            data: this.biaodata[0]
           },
           {
             name: "土壤湿度（平均）",
             type: "line",
-            data: [, , , , , , , , , , 85, 85,72 , 74,73 , , , , , , , , ,]
+            data: this.biaodata[1]
           },
           {
             name: "大气温度（平均）",
             type: "line",
-            data: [, , , , , , , , , , 27, 28, 28.5, 28.8,28.9 , , , ,]
+            data: this.biaodata[2]
           },
           {
             name: "大气湿度（平均）",
             type: "line",
-            data: [, , , , , , , , , , 75, 71, 72, 74,71 , , , , , , , , ,]
+            data: this.biaodata[3]
           },
           {
             name: "光照强度X10（平均）",
             type: "line",
-            data: [, , , , , , , , , , 702, 800, 1000, 1370,1500 , , , , , , , , ,]
+            data: this.biaodata[4]
           },
           {
             name: "CO2浓度x10（平均）",
             type: "line",
-            data: [, , , , , , , , , , 98, 100, 100,100 ,100, , , , , , , , , , ,]
+            data: this.biaodata[5]
           }
         ]
-      },
-      myChart: "",
-      qixiangzhandata: {}
-    };
-  },
-  created() {
-    if (!this.message.machinekey) {
-      this.qixiangzhan();
-    } else {
-      this.nowdateO = this.message.date;
-      this.Cardlist = this.message.value;
-      this.biaogedata();
-    }
-  },
-  mounted() {
-    this.myChart = this.$echarts.init(this.$refs.echer);
-    this.drawLine();
-  },
-  methods: {
-   async qixiangzhan() {
-      this.qixiangzhandata = {
-        date: this.message.time,
-        value: [
-          {
-            data: this.message.airhumidity1,
-            nikename: "空气湿度",
-            name: "airhumidity1"
-          },
-          { data: this.message.tair1, nikename: "空气温度", name: "tair1" },
-          { data: this.message.soi1, nikename: "光照强度", name: "soi1" },
-          { data: this.message.fengsu, nikename: "风速", name: "fengsu" },
-          { data: this.message.fengxiang, nikename: "风向", name: "fengxiang" }
-        ]
-      };
-      this.Cardlist = this.qixiangzhandata.value;
-      const { data } = await this.$http.post("seachdata/qx24houer");
-      this.tableData = data;
-    },
-    async biaogedata() {
-      const { data } = await this.$http.post("seachdata/24houer", {
-        machinekey: this.message.machinekey
-      });
-      if (data) {
-        this.tableData = data[0];
-        console.log(data[0])
-        this.biaodata = data[1];
-      } else {
-        this.$message.error("获取错误");
       }
-    },
-    //卡片
-    creatdatas() {
-  
-    },
-    //切换
-    datashowfun() {
-      this.$store.commit("datavhouerfun");
-      if (this.$store.state.datavhouer) {
-        this.myChart.clear();
-        this.myChart.setOption(this.option);
-      }
-    },
-    //画曲线
-    drawLine() {
-      // 窗口大小自适应方案
       this.myChart.setOption(this.option);
     }
   }
 };
 </script>
 <style lang="less" scoped>
+.biaotoushijian{
+  .el-col{
+    line-height: 40px;
+  }
+}
+.el-date-picker {
+width: 300px;
+}
 .block {
   width: 100%;
   height: 300px;

@@ -97,9 +97,6 @@ export default {
         if (resV) {
           this.writerdataV(resV);
         }
-        else{
-          return false;
-        }
       } 
       else 
       {
@@ -110,9 +107,6 @@ export default {
           });
         if (resV3) {
           this.writerdataV(resV3);
-        }
-        else{
-          return false;
         }
       }
     },
