@@ -209,6 +209,7 @@ export default {
   },
   methods: {
     seachdata(){
+      console.log(this.value2[0])
       let fdate =this.value2[0].toLocaleString('chinese',{hour12:false}).split('/').join('-')
       let sdate = this.value2[1].toLocaleString('chinese',{hour12:false}).split('/').join('-')
       this.biaogedata(fdate,sdate)
