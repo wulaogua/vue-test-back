@@ -54,27 +54,65 @@ export default {
         clearInterval(this.timer);
       } else {
         this.timer = setInterval(() => {
-          this.secahdata();
+          this.secahdatatime();
         }, 10000);
+      }
+    },
+    async secahdatatime() {
+      if (this.activeName === "FX050") {
+        const { data: res } = await this.$http.post("seach/qixiangzhan");
+        if (!res) {
+          this.$message.error("链接错误");
+          return;
+          /* return this.$message.error('链接错误'); */
+        } else {
+          this.chindredata = res;
+        }
+      } else {
+        const { data: res } = await this.$http.post("seachdataOne", {
+          machinekey: this.activeName
+        });
+        if (!res) {
+          this.$message.error("链接错误");
+          return;
+          /* return this.$message.error('链接错误'); */
+        } else {
+          this.chindredata = res;
+        }
       }
     },
     //查询
     async secahdata() {
-      const { data: res } = await this.$http.post("seachdataOne", {
-        machinekey: this.activeName
-      });
-      if (!res) {
-        this.$message.error("链接错误");
-        this.sonRefreshb = false;
-        return;
-        /* return this.$message.error('链接错误'); */
-      } else {
-        this.chindredata = res;
-        this.sonRefreshb = false;
-        this.$nextTick(() => {
-          this.sonRefreshb = true;
+      if (this.activeName === "FX050") {
+        const { data: res } = await this.$http.post("seach/qixiangzhan");
+        if (!res) {
+          this.$message.error("链接错误");
+          this.sonRefreshb = false;
+          return;
+        } else {
           this.chindredata = res;
+          this.sonRefreshb = false;
+          this.$nextTick(() => {
+            this.sonRefreshb = true;
+            this.chindredata = res;
+          });
+        }
+      } else {
+        const { data: res } = await this.$http.post("seachdataOne", {
+          machinekey: this.activeName
         });
+        if (!res) {
+          this.$message.error("链接错误");
+          this.sonRefreshb = false;
+          return;
+        } else {
+          this.chindredata = res;
+          this.sonRefreshb = false;
+          this.$nextTick(() => {
+            this.sonRefreshb = true;
+            this.chindredata = res;
+          });
+        }
       }
     },
     writerdataV(res) {
@@ -97,9 +135,7 @@ export default {
         if (resV) {
           this.writerdataV(resV);
         }
-      } 
-      else 
-      {
+      } else {
         const { data: resV3 } = await this.$http
           .post("user/MachineSchAll", { data: this.projectnumb })
           .catch(err => {
