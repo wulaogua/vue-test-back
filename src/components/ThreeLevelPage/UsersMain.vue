@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div>
+    <div v-if="dateshow">
       <span>实时数据</span>
       <span>{{nowdateO}}</span>
     </div>
     <el-divider class="dividermarg"></el-divider>
-    <el-row :gutter="12">
+    <el-row :gutter="12" v-if="dateshow">
       <!--卡片视图 -->
       <el-col :span="4" v-for="citem in Cardlist" :key="citem.id" :index="citem.id +''">
         <el-card class="card" :style="{background:cardcolor[citem.name]}">
@@ -26,7 +26,7 @@
     <el-row :gutter="20">
       <el-col :span="20">
         <el-row class="biaotoushijian">
-          <el-col :span="3" >
+          <el-col :span="3">
             <span>小时数据</span>
             <i class="el-icon-data-analysis" @click="datashowfun()"></i>
           </el-col>
@@ -49,7 +49,7 @@
           </el-col>
         </el-row>
         <el-divider class="dividermarg"></el-divider>
-        <el-table :data="tableData" stripe style="width: 100%" height="450" v-show="!dataShow">
+        <el-table :data="tableData" stripe style="width: 100%" height="430" v-show="!dataShow">
           <el-table-column prop="date" label="时间" width="280"></el-table-column>
           <el-table-column prop="nikename" label="设备名称" width="200"></el-table-column>
           <el-table-column prop="data" label="数据"></el-table-column>
@@ -72,13 +72,30 @@
 <script>
 export default {
   name: "dsa",
-  props: {
-    message: {
-      type: Object
+  props: ["message"],
+  computed: {
+    listData() {
+      return this.message;
+    }
+  },
+  watch: {
+    listData(val) {
+      this.dateshow = false;
+      if (!this.message.machinekey) {
+        this.qixiangzhan();
+         
+      } else {
+        this.nowdateO = this.message.date;
+        this.Cardlist = this.message.value;
+        this.$nextTick(() => {
+          this.dateshow = true;
+        });
+      }
     }
   },
   data() {
     return {
+      dateshow: false,
       pickerOptions: {
         shortcuts: [
           {
@@ -110,7 +127,7 @@ export default {
           }
         ]
       },
-      value2: "",
+      value2: [],
       creatdata: new Array(),
       nowdateO: "",
       dataShow: this.$store.state.datavhouer,
@@ -184,11 +201,11 @@ export default {
         fengsu: "m/s",
         fengxiang: "°"
       },
-      xzdateh:[],
+      xzdateh: [],
       show: false,
       biaodata: [],
       show: false,
-      biaodata: ['','','','','',''],
+      biaodata: ["", "", "", "", "", ""],
       option: {},
       myChart: "",
       qixiangzhandata: {}
@@ -200,6 +217,7 @@ export default {
     } else {
       this.nowdateO = this.message.date;
       this.Cardlist = this.message.value;
+      this.dateshow = true;
       //this.biaogedata();
     }
   },
@@ -207,13 +225,30 @@ export default {
     this.myChart = this.$echarts.init(this.$refs.echer);
     //this.drawLine();
   },
+
   methods: {
-    seachdata(){
-      let fdate =this.value2[0].toLocaleString('chinese',{hour12:false}).split('/').join('-')
-      let sdate = this.value2[1].toLocaleString('chinese',{hour12:false}).split('/').join('-')
-      this.biaogedata(fdate,sdate)
+    //时间格式转换函数（data为转换自定义new Date（）或者element中的日期时间按钮组件v-model的值）
+    formdate(date) {
+      let y = date.getFullYear();
+      let m = date.getMonth() + 1;
+      m = m < 10 ? "0" + m : m;
+      let d = date.getDate();
+      d = d < 10 ? "0" + d : d;
+      let h = date.getHours();
+      h = h < 10 ? "0" + h : h;
+      let minute = date.getMinutes();
+      minute = minute < 10 ? "0" + minute : minute;
+      let second = date.getSeconds();
+      second = second < 10 ? "0" + second : second;
+      return y + "-" + m + "-" + d + " " + h + ":" + minute + ":" + second;
     },
-    async qixiangzhan() {
+    seachdata() {
+      let fdate = this.formdate(this.value2[0]);
+      let sdate = this.formdate(this.value2[1]);
+      this.biaogedata(fdate, sdate);
+    },
+    qixiangzhan() {
+     // const { data } = await this.$http.post("seachdata/qx24houer");
       this.qixiangzhandata = {
         date: this.message.time,
         value: [
@@ -229,21 +264,20 @@ export default {
         ]
       };
       this.Cardlist = this.qixiangzhandata.value;
-      const { data } = await this.$http.post("seachdata/qx24houer");
-      this.tableData = data;
+      //this.tableData = data;
+      this.dateshow = true;
     },
-    async biaogedata(fdate,sdate) {
+    async biaogedata(fdate, sdate) {
       const { data } = await this.$http.post("seachdata/24houer", {
         machinekey: this.message.machinekey,
-        fdate:fdate,
-        sdate:sdate
+        fdate: fdate,
+        sdate: sdate
       });
       if (data) {
         this.tableData = data[0];
         this.biaodata = data[1];
         this.xzdateh = data[2];
         this.drawLine();
-        
       } else {
         this.$message.error("获取错误");
       }
@@ -261,7 +295,7 @@ export default {
     //画曲线
     drawLine() {
       // 窗口大小自适应方案
-     this.option =  {
+      this.option = {
         title: {
           text: "数据折线图"
         },
@@ -330,20 +364,20 @@ export default {
             data: this.biaodata[5]
           }
         ]
-      }
+      };
       this.myChart.setOption(this.option);
     }
   }
 };
 </script>
 <style lang="less" scoped>
-.biaotoushijian{
-  .el-col{
+.biaotoushijian {
+  .el-col {
     line-height: 40px;
   }
 }
 .el-date-picker {
-width: 300px;
+  width: 300px;
 }
 .block {
   width: 100%;
