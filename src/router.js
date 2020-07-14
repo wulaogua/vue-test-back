@@ -22,6 +22,7 @@ import plate from '@/components/plate'
 import chinddata from '@/components/mainpage/chinddata'
 import chinddat3 from '@/components/mainpage/chindtest3'
 import zonglan from '@/components/mainpage/zonglan'
+import store from './store.js'
 Vue.use(Router)
     /* const originalPush = Router.prototype.push
     Router.prototype.push = function push(location) {
@@ -55,6 +56,13 @@ const router = new Router({
             component: index,
             /* redirect: '/error', */
             meta: { role: ["admin", "user"], auth: true, keepAlive: true },
+            redirect: to => {
+                if (store.state.platedata === 3) {
+                    return '/deviceM'
+                } else {
+                    return '/porjtl'
+                }
+            },
             children: [
                 /* {
                                     path: '/plateI',
@@ -111,12 +119,12 @@ const router = new Router({
                     component: video,
                     meta: { role: "admin", auth: true, keepAlive: true, typenub: [1, 2, 3] }
                 },
-               /*  {
-                    path: '/zonglan',
-                    name: 'zonglan',
-                    component: zonglan,
-                    meta: { role: "admin", auth: true, keepAlive: true, typenub: [1, 2, 3] }
-                }, */
+                /*  {
+                     path: '/zonglan',
+                     name: 'zonglan',
+                     component: zonglan,
+                     meta: { role: "admin", auth: true, keepAlive: true, typenub: [1, 2, 3] }
+                 }, */
             ]
         },
         {
