@@ -45,7 +45,7 @@ export default {
     this.deviceMcreated();
   },
   mounted() {
-    //this.timedRefreshb();
+   this.timedRefreshb();
   },
   methods: {
     //定时刷新
