@@ -227,11 +227,25 @@ export default {
   },
 
   methods: {
-    seachdata(){
-      console.log(this.value2[0])
-      let fdate =this.value2[0].toLocaleString('chinese',{hour12:false}).split('/').join('-')
-      let sdate = this.value2[1].toLocaleString('chinese',{hour12:false}).split('/').join('-')
-      this.biaogedata(fdate,sdate)
+    //时间格式转换函数（data为转换自定义new Date（）或者element中的日期时间按钮组件v-model的值）
+    formdate(date) {
+      let y = date.getFullYear();
+      let m = date.getMonth() + 1;
+      m = m < 10 ? "0" + m : m;
+      let d = date.getDate();
+      d = d < 10 ? "0" + d : d;
+      let h = date.getHours();
+      h = h < 10 ? "0" + h : h;
+      let minute = date.getMinutes();
+      minute = minute < 10 ? "0" + minute : minute;
+      let second = date.getSeconds();
+      second = second < 10 ? "0" + second : second;
+      return y + "-" + m + "-" + d + " " + h + ":" + minute + ":" + second;
+    },
+    seachdata() {
+      let fdate = this.formdate(this.value2[0]);
+      let sdate = this.formdate(this.value2[1]);
+      this.biaogedata(fdate, sdate);
     },
     qixiangzhan() {
      // const { data } = await this.$http.post("seachdata/qx24houer");
