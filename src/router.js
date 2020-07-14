@@ -57,11 +57,17 @@ const router = new Router({
             /* redirect: '/error', */
             meta: { role: ["admin", "user"], auth: true, keepAlive: true },
             redirect: to => {
-                if (store.state.platedata === 3) {
-                    return '/deviceM'
-                } else {
-                    return '/porjtl'
+                if(store.state.lore==="admin"){
+                    if (store.state.platedata === 3) {
+                        return '/deviceM'
+                    } else {
+                        return '/porjtl'
+                    }
                 }
+                else
+               {
+                   return '/areacontrol'
+               }
             },
             children: [
                 /* {
