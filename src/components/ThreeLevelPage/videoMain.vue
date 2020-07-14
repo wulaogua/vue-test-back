@@ -28,24 +28,10 @@ export default {
     return {
       hls:'',
       statu:"",
-      Videolist: [
-        {
-          addr:
-            "http://hls01open.ys7.com/openlive/833d6e5a7e334697aac99638d3203d42.m3u8",
-          id: 1,
-          name: "阳澄湖木屋"
-        },
-        {
-          addr:
-            "http://hls01open.ys7.com/openlive/c1e7cef992584d8b988a459a3965683d.m3u8",
-          id: 2,
-          name: "阳澄湖木屋左"
-        }
-      ],
+      Videolist: [],
     };
   },
   created() {
-
   },
   mounted() {
     //初始化视频
