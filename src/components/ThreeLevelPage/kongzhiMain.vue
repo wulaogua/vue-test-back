@@ -95,7 +95,7 @@
     </div>
     <el-divider class="dividermarg"></el-divider>
     <div v-for="y in card2datalist" :key="y.devicename">
-      <el-card  :ref="y.id+y.devicename" @click.native="rwcardfun(y)">
+      <el-card :ref="y.id+y.devicename" @click.native="rwcardfun(y)">
         {{y.devicename}}
         <i class="el-icon-circle-plus-outline" style="margin-left:50px" />
       </el-card>
@@ -122,36 +122,58 @@
         </el-col>
       </el-row>
     </div>
-    <el-dialog :title="`${dilogname} 收货地址`" :visible.sync="dialogFormVisible">
+    <el-dialog :title="`${dilogname} 任务设置`" :visible.sync="dialogFormVisible" :before-close="handleClose">
       <el-collapse accordion>
         <el-collapse-item :name="cl.id" v-for="cl in collapselist" :key="cl.id">
           <template slot="title">
             {{cl.name}}
             <span style="margin-left:10%;color: rgb(204, 204, 204);">{{cl.janj}}</span>
           </template>
-          <el-form :model="cl.form" :inline="true">
+          <el-form :model="cl.form" :inline="true" :ref="'bd'+cl.id">
             <el-form-item label="任务名称" :label-width="formLabelWidth">
               <el-input v-model="cl.form.name" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="任务类型" :label-width="formLabelWidth">
-              <el-select v-model="cl.form.region" placeholder="请选择任务类型" style="width:203px">
+              <el-select
+                v-model="cl.form.region"
+                placeholder="请选择任务类型"
+                style="width:203px"
+                @change="((data)=>{regionchan(data,cl)})"
+              >
                 <el-option label="定时" value="dingshi"></el-option>
                 <el-option label="阈值" value="yuzhi"></el-option>
               </el-select>
             </el-form-item>
+            <!-- 定时-->
             <div v-show="!cl.dingshi">
               <el-form-item label="决断参数" :label-width="formLabelWidth">
                 <el-select v-model="cl.form.canshu" placeholder="请选择参数" style="width:203px">
-                  <el-option v-for="s in cl.canshulist" :key="s.name" :label="s.name" :value="s.value"></el-option>
+                  <el-option
+                    v-for="s in cl.canshulist"
+                    :key="s.name"
+                    :label="s.name"
+                    :value="s.value"
+                  ></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="阈值范围" :label-width="formLabelWidth">
-                <el-input v-model="cl.form.data1" autocomplete="off"></el-input>
+              <el-form-item
+                label="阈值范围"
+                :label-width="formLabelWidth"
+                prop="data1"
+                :rules="[{ pattern: /^(\-|\+)?\d+(\.\d+)?$/, message: '请输入小数或者整数',trigger: 'blur'}]"
+              >
+                <el-input v-model="cl.form.data1"></el-input>
               </el-form-item>
-              <el-form-item label="阈值范围" :label-width="formLabelWidth">
-                <el-input v-model="cl.form.data2" autocomplete="off"></el-input>
+              <el-form-item
+                label="阈值范围"
+                :label-width="formLabelWidth"
+                prop="data2"
+                :rules="[{ pattern: /^(\-|\+)?\d+(\.\d+)?$/, message: '请输入小数或者整数',trigger: 'blur'}]"
+              >
+                <el-input v-model="cl.form.data2"></el-input>
               </el-form-item>
             </div>
+            <!-- 阈值-->
             <div v-show="cl.dingshi">
               <el-form-item label="开始时间" :label-width="formLabelWidth">
                 <el-time-picker v-model="cl.form.date1" style="width:203px"></el-time-picker>
@@ -175,13 +197,21 @@
 export default {
   props: ["message"],
   data() {
+    let isNum = (rule, value, callback) => {
+      let age = /^(\-|\+)?\d+(\.\d+)?$/;
+      if (age.test(this.collapselist[0].form.data1)) {
+        callback();
+      } else {
+        callback(new Error(age.test(value)));
+      }
+    };
     return {
       collapselist: [
         {
           name: "任务1",
           id: "1",
-          dingshi:false,
-          janj:"五",
+          dingshi: false,
+          janj: "五",
           form: {
             name: "", //任务名
             region: "", //任务类型
@@ -199,8 +229,8 @@ export default {
         {
           name: "任务2",
           id: "2",
-          dingshi:true,
-          janj:"无",
+          dingshi: false,
+          janj: "无",
           form: {
             name: "", //任务名
             region: "", //任务类型
@@ -218,8 +248,8 @@ export default {
         {
           name: "任务3",
           id: "3",
-          dingshi:true,
-          janj:"无",
+          dingshi: false,
+          janj: "无",
           form: {
             name: "", //任务名
             region: "", //任务类型
@@ -237,8 +267,8 @@ export default {
         {
           name: "任务4",
           id: "4",
-          dingshi:true,
-          janj:"无",
+          dingshi: false,
+          janj: "无",
           form: {
             name: "", //任务名
             region: "", //任务类型
@@ -253,11 +283,11 @@ export default {
             { name: "日照", id: 2, value: "rizhao" }
           ]
         },
-            {
+        {
           name: "任务5",
           id: "5",
-          dingshi:true,
-          janj:"无",
+          dingshi: false,
+          janj: "无",
           form: {
             name: "", //任务名
             region: "", //任务类型
@@ -272,11 +302,11 @@ export default {
             { name: "日照", id: 2, value: "rizhao" }
           ]
         },
-            {
+        {
           name: "任务6",
           id: "6",
-          dingshi:true,
-          janj:"无",
+          dingshi: false,
+          janj: "无",
           form: {
             name: "", //任务名
             region: "", //任务类型
@@ -291,11 +321,11 @@ export default {
             { name: "日照", id: 2, value: "rizhao" }
           ]
         },
-            {
+        {
           name: "任务7",
           id: "7",
-          dingshi:true,
-          janj:"无",
+          dingshi: false,
+          janj: "无",
           form: {
             name: "", //任务名
             region: "", //任务类型
@@ -310,11 +340,11 @@ export default {
             { name: "日照", id: 2, value: "rizhao" }
           ]
         },
-            {
+        {
           name: "任务8",
           id: "8",
-          dingshi:true,
-          janj:"无",
+          dingshi: false,
+          janj: "无",
           form: {
             name: "", //任务名
             region: "", //任务类型
@@ -336,19 +366,19 @@ export default {
       anniutext: "修改",
       refresh: true,
       carddatalist: Array(),
-      card2datalist:[],
+      card2datalist: []
     };
   },
   created() {
-    this.carddatalist=this.message.adata
+    this.carddatalist = this.message.adata;
     console.log(this.message.adata);
-    this.message.adata.forEach((itme)=>{
+    this.message.adata.forEach(itme => {
       this.card2datalist.push({
-        id:itme.id,
-        devicename:itme.devicename,
-        devicekey:itme.devicekey,
-      })
-    })
+        id: itme.id,
+        devicename: itme.devicename,
+        devicekey: itme.devicekey
+      });
+    });
   },
   mounted() {},
   updated() {
@@ -358,10 +388,23 @@ export default {
     });
   },
   methods: {
-    rwcardfun(data){
-      console.log(data);
-      this.dialogFormVisible=true;
-      this.dilogname= data.devicename;
+    handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
+      },
+    regionchan(data, data2) {
+      if (data === "yuzhi") {
+        data2.dingshi = false;
+      } else {
+        data2.dingshi = true;
+      }
+    },
+    rwcardfun(data) {
+      this.dialogFormVisible = true;
+      this.dilogname = data.devicename;
     },
     chufa1() {
       this.anniutext = "任务一";

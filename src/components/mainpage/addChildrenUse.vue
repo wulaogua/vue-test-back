@@ -40,7 +40,7 @@
         ></el-button>
       </el-col>
     </el-row>
-    <el-dialog title="信息修改" :visible.sync="dialogFormVisible" @close="closeDialog">
+    <el-dialog title="信息修改" :visible.sync="dialogFormVisible" @close="closeDialog" :before-close="handleClose">
       <!--子组件-->
       <User v-bind:message="chindredata" @testvalue="testvalue"></User>
     </el-dialog>
@@ -67,6 +67,13 @@ export default {
  
   methods: {
     //删除用户
+        handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
+      },
    async deletUser(name)
    {
       const deletchildren = await this.$http.post("user/deletchlidren",{'nanme':name,"data":this.projectnumb});
