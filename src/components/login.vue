@@ -49,7 +49,7 @@ export default {
   data() {
     return {
       loginForm: {
-        username: "admin",
+        username: "suxianrun",
         password: "123456",
         code: ""
       },

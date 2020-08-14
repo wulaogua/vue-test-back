@@ -222,6 +222,7 @@ export default {
     }
   },
   mounted() {
+    
     this.myChart = this.$echarts.init(this.$refs.echer);
     //this.drawLine();
   },
@@ -274,6 +275,7 @@ export default {
         sdate: sdate
       });
       if (data) {
+        console.log(data)
         this.tableData = data[0];
         this.biaodata = data[1];
         this.xzdateh = data[2];
@@ -346,7 +348,7 @@ export default {
           {
             name: "大气温度（平均）",
             type: "line",
-            data: this.biaodata[2]
+            data: this.biaodata[6]
           },
           {
             name: "大气湿度（平均）",

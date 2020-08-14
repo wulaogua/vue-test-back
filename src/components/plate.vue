@@ -215,7 +215,10 @@ export default {
         this.myChart.resize();
         this.myChart.on("click", async item => {
           //获取序列
-          const duilielist = item.event.event.path[2].textContent.split(".");
+          let duilielist = item.event.event.path[2].textContent.split(".");
+          if(duilielist.length<2){
+              duilielist = item.event.event.path[2].textContent.split("。");
+          }
           if (item.dataIndex === 1) 
           {
             //跳转平台设置界面
@@ -231,6 +234,7 @@ export default {
               platename: duilielist[0],
               areaname: item.name
             });
+            console.log(pronumb)
             this.$store.commit("addpjecnum", pronumb.data[0].projectnumb);
             this.$store.commit("addheardname",this.Dardlist[0].name);
             this.$store.commit("addplatedata", 2);
