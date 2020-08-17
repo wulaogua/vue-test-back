@@ -36,7 +36,7 @@
       @close="closedia()"
     >
       <el-collapse accordion @change="colch">
-        <el-collapse-item :name="cl.id" v-for="(cl,i) in collapselist" :key="cl.id" class="el2">
+        <el-collapse-item :name="cl.id" v-for="cl in collapselist" :key="cl.id" class="el2">
           <template slot="title">
             {{cl.name}}
             <span style="margin-left:10%;color: rgb(204, 204, 204);">{{cl.janj}}</span>

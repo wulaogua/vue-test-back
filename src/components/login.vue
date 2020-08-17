@@ -1,7 +1,8 @@
 <template>
   <div class="loginPage">
     <div class="loginbox">
-      <div class="loginHead">账户登录</div>
+      <div class="loginneir">
+      <div class="loginHead"><img src="../../src/assets/logo1.png" alt=""><h4>XX平台</h4></div>
       <el-form
         label-width="0px"
         class="loginForm"
@@ -31,12 +32,14 @@
             </template>
           </el-input>
         </el-form-item>
-
         <el-form-item class="btns">
+          <div  class="btn1">
           <el-button type="primary" @click="loginMethods()">登陆</el-button>
-          <el-button type="warning" @click="loginClearMethods()">重置</el-button>
+          <el-button type="warning" class="btn2" @click="loginClearMethods()">重置</el-button>
+          </div>
         </el-form-item>
       </el-form>
+      </div>
     </div>
   </div>
 </template>
@@ -147,8 +150,26 @@ export default {
 </script>
 
 <style lang="less" slot-scope="scope">
+.loginneir{
+  padding: 10px;
+}
 .loginHead {
-  padding: 10px 20px;
+  padding:30px 20px;
+  img{
+    border-radius: 3px;
+    width: 50px;
+    height: 50px;
+    float:left;
+  }
+  h4{
+    letter-spacing: 2px;
+    font-weight: 400;
+    font-size: 2em;
+    color: #000;
+    margin: 0 10px;
+    line-height: 50px;
+    float:left;
+  }
 }
 .loginForm {
   position: relative;
@@ -158,18 +179,24 @@ export default {
   box-sizing: border-box;
 }
 .btns {
-  display: -webkit-box;
-  justify-content: end;
+  width: 100%;
+  .btn1{
+   float: right;
+  }
+}
+.btns /deep/ .el-form-item__content{
+  width: 100%;
 }
 .loginbox {
-  width: 450px;
-  height: 320px;
-  background-color: royalblue;
-  border-radius: 3px;
+  width: 500px;
+  height: 380px;
+  background-color: rgb(255, 255, 255);
+  border:  1px solid rgba(78, 78, 78, 0.2);
+  border-radius: 10px;
 }
 .loginPage {
   height: 100%;
-  background: rgb(245, 245, 245);
+  background: rgb(250, 249, 249);
   display: flex;
   justify-content: center;
   align-items: center;
