@@ -28,8 +28,8 @@
                 <strong>XX物联网平台</strong>
                 智能化物联网设备，共享XXIOT能力,智能化物联网设备，共享XXIOT能力,智能化物联网设备
               </p>
-              <p>
-                <a class="button-arrow" href="#">登录Login</a>
+              <p @click="$router.push({ path: '/login' })" style="cursor: pointer;">
+                <a class="button-arrow">登录Login</a>
               </p>
               <span class="animation"></span>
             </div>
@@ -130,6 +130,7 @@ export default {
 
 <style lang="less" scoped>
 .el-header {
+  
   font-family: "sofia-pro-soft", sans-serif;
   max-width: 1330px;
   margin: 0 auto;

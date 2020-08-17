@@ -149,7 +149,7 @@ export default {
 };
 </script>
 
-<style lang="less" slot-scope="scope">
+<style lang="less" scoped>
 .loginneir{
   padding: 10px;
 }
@@ -174,7 +174,6 @@ export default {
 .loginForm {
   position: relative;
   bottom: 0px;
-
   padding: 40px 20px;
   box-sizing: border-box;
 }
