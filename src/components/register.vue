@@ -19,12 +19,12 @@
           </el-form-item>
           <el-form-item prop="tal">
             <el-input v-model="registerForm.tal" placeholder="请输入联系方式">
-              <i slot="prefix" class="el-icon-lollipop"></i>
+              <i slot="prefix" class="el-icon-phone-outline"></i>
             </el-input>
           </el-form-item>
           <el-form-item prop="machinekey">
             <el-input v-model="registerForm.machinekey" placeholder="请输入设备号">
-              <i slot="prefix" class="el-icon-lollipop"></i>
+              <i slot="prefix" class="el-icon-coin"></i>
             </el-input>
           </el-form-item>
           <el-form-item prop="code">

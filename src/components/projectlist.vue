@@ -2,8 +2,10 @@
   <div class="backcolor">
     <el-container>
       <el-header>
-        <span class="span">项目列表</span>
-        <el-button type="info" @click="backbutton()">退出</el-button>
+        <div class="headtext">
+          <img src="../../src/assets/logo3.png" alt /> 项目列表
+        </div>
+        <el-button plain @click="backbutton()">退出</el-button>
       </el-header>
       <el-main>
         <el-row class="elrow">
@@ -19,7 +21,7 @@
             <div class="card-3d" >
             <!-- 正面-->
               <div class="card card-z" ref="cardz">
-                              <el-card>
+                 <el-card>
                   <div slot="header">
                     <span>项目名:{{cardid.areaname}}</span>
                     <el-button
@@ -194,10 +196,20 @@ export default {
 </script>
 <style lang="less" scoped>
 /* ------------- */
+.headtext {
+  color: #fff;
+  font-size: 1.1em;
+  letter-spacing: 2px;
+  img {
+    border-radius: 5px;
+    display: inline-block;
+    vertical-align: middle;
+    width: 40px;
+    height: 40px;
+  }
+}
 .Block3 {
   width: 100%;
-  height: 150px;
-  /*  background: burlywood; */
 }
 .text {
   height: 100%;
@@ -217,19 +229,21 @@ export default {
   width: 100%;
   height: 100%;
 }
-/* ------------- */
 .backcolor {
   height: 100%;
-  background: #f2f2f2;
+  background: rgb(250, 249, 249);
 }
 .el-header {
   border-bottom: 3px solid rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
-  background-color: #e95420;
+  background-color: #38a9e7;
   align-items: center;
   text-align: center;
   line-height: 60px;
+  .el-button:hover {
+    color: #333;
+  }
 }
 .el-main {
   color: #333;
@@ -237,7 +251,7 @@ export default {
 }
 .elrow {
   margin-top: 20px;
-  height: 100px;
+
 }
 .elcol {
   margin-bottom: 20px;
@@ -267,7 +281,6 @@ export default {
     &.card-z {
     }
     &.card-back {
-      
     }
     &.card-f-y {
       transform: rotateY(-180deg);

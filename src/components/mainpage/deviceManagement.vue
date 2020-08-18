@@ -1,14 +1,8 @@
 <template>
   <div>
-    <!-- 面包屑导航区域 -->
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>片区管理</el-breadcrumb-item>
-      <el-breadcrumb-item>{{tagabreadcrumb}}</el-breadcrumb-item>
-    </el-breadcrumb>
     <!--  -->
     <el-row type="flex">
-      <el-col :span="4" class="color1">
+      <el-col :span="3" class="color1">
         <!-- 侧边栏设备表 -->
         <div>片区列表</div>
         <el-tag
@@ -21,7 +15,7 @@
         >{{tag.nickname}}</el-tag>
       </el-col>
       <!-- 三级子栏 -->
-      <el-col :span="19" class="color">
+      <el-col :span="21" class="color">
         <!--子组件占位-->
         <deviceMain v-bind:message="deviceForm" v-if="sonRefresh" @tvalue="tvalue"></deviceMain>
       </el-col>

@@ -1,22 +1,46 @@
 <template>
   <div class="backcolor">
-    <el-container>
+    <el-container style="background: rgb(250, 249, 249);">
       <el-header>
-        <span class="span">平台列表</span>
-        <el-button type="info" @click="backbutton()">退出</el-button>
+        <div class="headtext">
+          <img src="../../src/assets/logo3.png" alt /> 平台列表
+        </div>
+        <el-button plain @click="backbutton()">退出</el-button>
       </el-header>
       <el-main>
         <el-row :gutter="20">
-          <el-col :span="6" class="elcol" v-for="i in Dardlist" :key="i.id">
-            <div class="coldiv">
-              <span @click="drawLine(i)" class="nameclick">平台名称：{{i.name}}</span>
-              <i class="el-icon-edit changerplate" @click="changrplate(i)"></i>
-              <div :id="i.name" class="elchart" style="height:40px"></div>
+          <el-col
+            :span="7"
+            class="elcol"
+            v-for="i in Dardlist"
+            :key="i.id"
+            style="padding:0 !important"
+          >
+            <el-row class="elcolrow">
+              <el-col :span="18">
+                <!--平台名字-->
+                <div class="coldiv" >
+                  <span class="nameclick">平台名称:</span>
+                  <div>{{i.name}}</div>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <!--修改按钮-->
+                <div class="coldiv1" @click="changrplate(i)">
+                  <i class="el-icon-edit changerplate" ></i>
+                </div>
+              </el-col>
+            </el-row>
+            <!--each预留-->
+            <div :id="i.name" class="elchart" style="height:1px"></div>
+            <div class="coldiv2" @click="drawLine(i)">
+              <span>查看详情</span>
+              <i class="el-icon-right"></i>
             </div>
           </el-col>
           <!-- 新增按钮-->
-          <el-col :span="6" align="center">
-            <el-button type="warning" icon="el-icon-plus" circle @click="addplate()"></el-button>
+          <el-col :span="6" align="center" style="line-height:112px;">
+            <el-button type="warning" icon="el-icon-plus" circle @click="addplate()" ></el-button>
           </el-col>
         </el-row>
       </el-main>
@@ -37,30 +61,27 @@ export default {
               {
                 name: "1项目",
                 value: 1231,
-                relationship: "110"
+                relationship: "110",
               },
               {
                 name: "2项目",
-                value: 3312
-              }
+                value: 3312,
+              },
             ],
-            relationship: "110"
+            relationship: "110",
           },
-
           {
             name: "2行业",
             children: [
               { name: "3项目", value: 8833 },
               { name: "4项目", value: 1732 },
-              { name: "5项目", value: 3623 }
-            ]
+              { name: "5项目", value: 3623 },
+            ],
           },
-
           {
             name: "3行业",
-            children: [{ name: "6项目", value: 4116 }]
+            children: [{ name: "6项目", value: 4116 }],
           },
-
           {
             name: "4行业",
             children: [
@@ -91,10 +112,10 @@ export default {
               { name: "31项目", value: 791 },
               { name: "32项目", value: 1124 },
               { name: "33项目", value: 1876 },
-              { name: "34项目", value: 1101 }
-            ]
-          }
-        ]
+              { name: "34项目", value: 1101 },
+            ],
+          },
+        ],
       }, //树 数据
       Dardlist: Array(), //多重树 名称
       test: false,
@@ -108,12 +129,12 @@ export default {
     //this.drawLine();
   },
   methods: {
-   async changrplate(key) {
+    async changrplate(key) {
       let { data: resPlate } = await this.$http.post("chartdata/query", {
-        id: key.id
+        id: key.id,
       });
       if (resPlate.meta.status === 200) {
-       this.$store.commit("addsontree",resPlate.meta.data[0]); 
+        this.$store.commit("addsontree", resPlate.meta.data[0]);
       } else {
         return;
       }
@@ -125,7 +146,7 @@ export default {
     },
     async screahdata() {
       const { data: res } = await this.$http.post("chartdata/seek");
-      res.meta.data.forEach(item => {
+      res.meta.data.forEach((item) => {
         this.Dardlist.push({ name: item.formname, id: item._id });
       });
     },
@@ -136,11 +157,10 @@ export default {
       this.$router.push("/");
     },
     zhaobaba(tree, value) {
-      tree.children.forEach(hangye => {
-        hangye.children.forEach(xiangmu => {
-          xiangmu.children.forEach(jidi => {
+      tree.children.forEach((hangye) => {
+        hangye.children.forEach((xiangmu) => {
+          xiangmu.children.forEach((jidi) => {
             if (jidi.name === value) {
-
             }
           });
         });
@@ -149,7 +169,7 @@ export default {
 
     async drawLine(key) {
       let { data: resPlate } = await this.$http.post("chartdata/query", {
-        id: key.id
+        id: key.id,
       });
       if (resPlate.meta.status === 200) {
         this.data1 = resPlate.meta.data[0];
@@ -159,48 +179,52 @@ export default {
       let option = {
         tooltip: {
           trigger: "item",
-          triggerOn: "mousemove"
+          triggerOn: "mousemove",
         },
         series: [
           {
+            //类型
             type: "tree",
             id: 0,
             name: "tree1",
             data: [this.data1],
-
             top: "0%",
             left: "11%",
             bottom: "0%",
             right: "13%",
             symbolSize: 10,
-
+            //曲线
             edgeShape: "polyline",
-            edgeForkPosition: "63%",
+            edgeForkPosition: "30%",
             initialTreeDepth: 3,
-
+            
             lineStyle: {
-              width: 2
+              width: 2,
+              color:"#fff",
             },
             label: {
-              backgroundColor: "#fff",
-              position: "left",
-              verticalAlign: "middle",
-              align: "right"
+              position: "top",
+              verticalAlign: "bottom",
+              align: "center",
+              fontSize:12,
+              color:"#fff"
             },
             leaves: {
               label: {
-                position: "right",
-                verticalAlign: "middle",
-                align: "left"
-              }
+                position: "top",
+                verticalAlign: "bottom",
+                align: "center",
+              },
             },
+            //展开等级
             initialTreeDepth: 3,
-            roam: true,
+            //是否移动
+            roam: "move",
             expandAndCollapse: true,
-            animationDuration: 550,
-            animationDurationUpdate: 750
-          }
-        ]
+            animationDuration: 400,
+            animationDurationUpdate: 800,
+          },
+        ],
       };
       if (this.myChart === undefined) {
         this.myChart = this.$echarts.init(document.getElementById(key.name));
@@ -213,14 +237,13 @@ export default {
 
         this.tree_ele.style.height = newHeight + "px";
         this.myChart.resize();
-        this.myChart.on("click", async item => {
+        this.myChart.on("click", async (item) => {
           //获取序列
           let duilielist = item.event.event.path[2].textContent.split(".");
-          if(duilielist.length<2){
-              duilielist = item.event.event.path[2].textContent.split("。");
+          if (duilielist.length < 2) {
+            duilielist = item.event.event.path[2].textContent.split("。");
           }
-          if (item.dataIndex === 1) 
-          {
+          if (item.dataIndex === 1) {
             //跳转平台设置界面
             this.$store.commit("addplatedata", 1);
             this.$store.commit("addplatename", item.name);
@@ -228,23 +251,24 @@ export default {
           }
           if (item.data.children && !item.data.children[0].children) {
             //跳转项目设置界面
-            const {
-              data: pronumb
-            } = await this.$http.post("project/searchprojectOne", {
-              platename: duilielist[0],
-              areaname: item.name
-            });
-            console.log(pronumb)
+            const { data: pronumb } = await this.$http.post(
+              "project/searchprojectOne",
+              {
+                platename: duilielist[0],
+                areaname: item.name,
+              }
+            );
+            console.log(pronumb);
             this.$store.commit("addpjecnum", pronumb.data[0].projectnumb);
-            this.$store.commit("addheardname",this.Dardlist[0].name);
+            this.$store.commit("addheardname", this.Dardlist[0].name);
             this.$store.commit("addplatedata", 2);
             this.$router.push("/index");
           } else {
             if (item.value !== undefined) {
               //跳转到片区
-              this.$store.commit("addplatedata",3);
-              this.$store.commit("addareadata",duilielist);
-             this.$router.push("/index");
+              this.$store.commit("addplatedata", 3);
+              this.$store.commit("addareadata", duilielist);
+              this.$router.push("/index");
             }
           }
         });
@@ -263,7 +287,7 @@ export default {
         this.tree_ele.style.height = newHeight + "px";
         this.myChart.resize();
 
-        this.myChart.on("click", async item => {
+        this.myChart.on("click", async (item) => {
           const duilielist = item.event.event.path[2].textContent.split(".");
           if (item.dataIndex === 1) {
             //跳转平台设置界面
@@ -273,12 +297,13 @@ export default {
           }
           if (item.data.children && !item.data.children[0].children) {
             //跳转项目设置界面
-            const {
-              data: pronumb
-            } = await this.$http.post("project/searchprojectOne", {
-              platename: duilielist[0],
-              areaname: item.name
-            });
+            const { data: pronumb } = await this.$http.post(
+              "project/searchprojectOne",
+              {
+                platename: duilielist[0],
+                areaname: item.name,
+              }
+            );
             this.$store.commit("addpjecnum", pronumb.data[0].projectnumb);
             this.$store.commit("addplatedata", 2);
             this.$router.push("/index");
@@ -286,14 +311,14 @@ export default {
             if (item.value !== undefined) {
               //跳转到片区
               this.$store.commit("addplatedata", 3);
-              this.$store.commit("addareadata",duilielist);
+              this.$store.commit("addareadata", duilielist);
               this.$router.push("/index");
             }
           }
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -302,34 +327,84 @@ i {
   margin-left: 2%;
 }
 .nameclick {
-  cursor: pointer;
 }
 .backcolor {
   height: 100%;
-  background: #f2f2f2;
+  background: rgb(250, 249, 249);
 }
 .el-header {
   border-bottom: 3px solid rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
-  background-color: #e95420;
+  background-color: #38a9e7;
   align-items: center;
   text-align: center;
   line-height: 60px;
+  .el-button {
+    border: 1px solid rgba(200, 242, 221, 0.89);
+  }
+  .el-button:hover {
+    color: #333;
+  }
 }
 .el-main {
   color: #333;
   height: 100%;
 }
 .elcol {
-  margin-bottom: 20px;
-  text-align: center;
-  background: cornsilk;
+  border-radius: 3px;
+  background: #4db5ab;
+  border: 1.5px solid rgba(114, 114, 114, 0.459);
+  .coldiv {
+    padding: 10px;
+    text-align: center;
+    color: #fff;
+    background: #4db5ab;
+    font-size: 1.2em;
+  }
+  .coldiv1 {
+    cursor: pointer;
+    padding: 10px;
+    line-height: 50px;
+    text-align: center;
+    color: #fff;
+    background: #4db5ab;
+    transition:background 0.5s;
+    font-size: 1.2em;
+  }
+  .coldiv1:hover{
+     background: #694db5;
+  }
+  .coldiv2 {
+    cursor: pointer;
+    color: #7cb6dc;
+    font-size: 0.9em;
+    padding: 10px;
+    text-align: left;
+    background: #fff;
+    transition:background 0.5s;
+    i {
+      font-size: 1.3em;
+      float: right;
+    }
+  }
+  .coldiv2:hover{
+    color: #fff;
+     background: #694db5;
+  }
 }
-.coldiv {
-  width: 100%;
 
-  border: 1px solid rgba(0, 0, 0, 0.5);
+.headtext {
+  color: #fff;
+  font-size: 1.1em;
+  letter-spacing: 2px;
+  img {
+    border-radius: 5px;
+    display: inline-block;
+    vertical-align: middle;
+    width: 40px;
+    height: 40px;
+  }
 }
 //卡片视图
 </style>
