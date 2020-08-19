@@ -1,48 +1,61 @@
 <template>
   <div class="registPage">
-    <div class="registbox">
-      <div class="backdiv">
-        <img src="../../src/assets/logo2.png" alt />
+    <div>
+      <div class="registbox">
+        <div class="backdiv">
+          <img src="../../src/assets/logo2.png" alt />
+        </div>
+        <div class="rebox">
+          <div class="registHead">账户注册</div>
+          <el-form
+            class="registForm"
+            :model="registerForm"
+            :rules="registerRules"
+            ref="registerRef"
+          >
+            <el-form-item prop="username">
+              <el-input v-model="registerForm.username" placeholder="请输入用户名">
+                <i slot="prefix" class="el-icon-user-solid"></i>
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="password">
+              <el-input v-model="registerForm.password" placeholder="请输入密码">
+                <i slot="prefix" class="el-icon-lollipop"></i>
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="tal">
+              <el-input v-model="registerForm.tal" placeholder="请输入联系方式">
+                <i slot="prefix" class="el-icon-phone-outline"></i>
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="machinekey">
+              <el-input v-model="registerForm.machinekey" placeholder="请输入设备号">
+                <i slot="prefix" class="el-icon-coin"></i>
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="code">
+              <el-input type="text" v-model="registerForm.code" placeholder="请输入验证码">
+                <template slot="append">
+                  <div class="login-code" @click="refreshCode">
+                    <Identify :identifyCode="identifyCode"></Identify>
+                  </div>
+                </template>
+              </el-input>
+            </el-form-item>
+            <el-form-item class="btns">
+              <div class="btnlist">
+                <el-button type="primary" @click="registerMethods()">注册</el-button>
+                <el-button type="warning" @click="registerClearMethods()">重置</el-button>
+              </div>
+            </el-form-item>
+          </el-form>
+        </div>
       </div>
-      <div class="rebox">
-        <div class="registHead">账户注册</div>
-        <el-form class="registForm" :model="registerForm" :rules="registerRules" ref="registerRef">
-          <el-form-item prop="username">
-            <el-input v-model="registerForm.username" placeholder="请输入用户名">
-              <i slot="prefix" class="el-icon-user-solid"></i>
-            </el-input>
-          </el-form-item>
-          <el-form-item prop="password">
-            <el-input v-model="registerForm.password" placeholder="请输入密码">
-              <i slot="prefix" class="el-icon-lollipop"></i>
-            </el-input>
-          </el-form-item>
-          <el-form-item prop="tal">
-            <el-input v-model="registerForm.tal" placeholder="请输入联系方式">
-              <i slot="prefix" class="el-icon-phone-outline"></i>
-            </el-input>
-          </el-form-item>
-          <el-form-item prop="machinekey">
-            <el-input v-model="registerForm.machinekey" placeholder="请输入设备号">
-              <i slot="prefix" class="el-icon-coin"></i>
-            </el-input>
-          </el-form-item>
-          <el-form-item prop="code">
-            <el-input type="text" v-model="registerForm.code" placeholder="请输入验证码">
-              <template slot="append">
-                <div class="login-code" @click="refreshCode">
-                  <Identify :identifyCode="identifyCode"></Identify>
-                </div>
-              </template>
-            </el-input>
-          </el-form-item>
-          <el-form-item class="btns">
-            <div class="btnlist">
-              <el-button type="primary" @click="registerMethods()">注册</el-button>
-              <el-button type="warning" @click="registerClearMethods()">重置</el-button>
-            </div>
-          </el-form-item>
-        </el-form>
+      <div class="refloot">
+        <span>
+          已注册过了帐户？
+          <a href="http://localhost:8080/#/login">登录</a>
+        </span>
       </div>
     </div>
   </div>
@@ -157,10 +170,14 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.btnlist{
+.refloot {
+  text-align: center;
+  padding-top: 40px;
+}
+.btnlist {
   float: right;
 }
-.btns /deep/ .el-form-item__content{
+.btns /deep/ .el-form-item__content {
   width: 100%;
 }
 .registHead {
