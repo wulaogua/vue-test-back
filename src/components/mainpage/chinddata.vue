@@ -82,7 +82,8 @@ export default {
       }
     },
     //查询
-    async secahdata() {
+    async secahdata() 
+    {
       if (this.activeName === "FX050") {
         const { data: res } = await this.$http.post("seach/qixiangzhan");
         if (!res) {
@@ -125,26 +126,12 @@ export default {
       }
     },
     //查询所有子账户
-    async deviceMcreated() {
-      if (this.$store.state.platedata === 3) {
-        const { data: resV } = await this.$http
-          .post("user/MachineSchOne", { data: this.$store.state.areadata })
-          .catch(err => {
-            this.$message.error("网络错误");
-          });
-        if (resV) {
-          this.writerdataV(resV);
-        }
-      } else {
-        const { data: resV3 } = await this.$http
-          .post("user/MachineSchAll", { data: this.projectnumb })
-          .catch(err => {
-            this.$message.error("网络错误");
-          });
-        if (resV3) {
-          this.writerdataV(resV3);
-        }
-      }
+        async deviceMcreated() 
+    {
+      const { data: resCdata1 } = await this.$http.post("user/userdata");
+      if(resCdata1){
+        this.writerdataV(resCdata1);
+      }  
     },
     tableclickfun(data1, data2) {
       this.secahdata();
