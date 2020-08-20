@@ -1,14 +1,8 @@
 <template>
   <div>
-    <!-- 面包屑导航区域 -->
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>视频</el-breadcrumb-item>
-      <el-breadcrumb-item></el-breadcrumb-item>
-    </el-breadcrumb>
     <!-- 二级侧边栏 -->
     <el-row :gutter="30">
-      <el-col :span="4">
+      <el-col :span="3">
         <el-input placeholder="请输入内容"></el-input>
         <el-tabs v-model="activeName" tab-position="left" @tab-click="tabdata">
           <el-tab-pane
@@ -19,7 +13,7 @@
           ></el-tab-pane>
         </el-tabs>
       </el-col>
-      <el-col :span="20">
+      <el-col :span="21">
         <!-- 子栏占位 <users v-bind:message="chindredata" v-if="sonRefreshb"></users> -->
         <videos v-bind:message="chindredata" v-if="sonRefreshb"></videos>
       </el-col>

@@ -51,7 +51,7 @@
           <el-col :span="20" class="projectHeadName">项目列表</el-col>
         </el-row>
         <el-row class="cardRow" :gutter="20">
-          <el-col :span="4" v-for="(o,index) in 6" :key="o">
+          <el-col :span="4" v-for="o in 6" :key="o">
             <el-card :body-style="{ padding: '0px' }">
               <img
                 src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
@@ -92,7 +92,7 @@ export default {
 };
 </script>
 
-<style lang="less"  slot-scope="scope">
+<style lang="less"  scoped>
 .projectHeadName {
   white-space: nowrap;
   text-align: center;

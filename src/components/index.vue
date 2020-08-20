@@ -5,15 +5,9 @@
       <div>
         <span>{{heardname}}物联网后台</span>
       </div>
-      <el-button type="info" @click="loginout()">退出</el-button>
+      <el-button plain @click="loginout()">退出</el-button>
     </el-header>
     <el-container>
-      <!-- 侧边栏区域 -->
-      <!-- :unique-opened只允许打开一个下拉列表 -->
-      <!-- :collapse侧边栏展开与折叠 -->
-      <!--collapse-transition侧边栏展开动画-->
-      <!--:default-active="this.$route.path"-->
-      <!--:default-active="activePath""-->
       <el-aside :width="isCollapse ? '64px' :'200px'">
         <div class="toggle-button" @click="toggleCollapse">|||</div>
         <el-menu
@@ -34,9 +28,22 @@
       </el-aside>
       <el-container>
         <!-- 主要显示区域 -->
+        <!-- 面包屑导航区域 -->
+        <div class="yemei">
+          <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>{{routname}}</el-breadcrumb-item>
+          </el-breadcrumb>
+        </div>
         <el-main>
           <!-- 路由占位符号 -->
-           <vueloading class="vueloading" :active="this.$store.state.loadingactive" spinner="line-down" color="#ff6700" background-color="rgba(232,232,232,0.9)"/>
+          <vueloading
+            class="vueloading"
+            :active="this.$store.state.loadingactive"
+            spinner="line-down"
+            color="#ff6700"
+            background-color="rgba(232,232,232,0.9)"
+          />
           <router-view></router-view>
         </el-main>
         <!-- 底部区域 -->
@@ -50,9 +57,10 @@
 export default {
   data() {
     return {
-      heardname:this.$store.state.heardname,
+      heardname: this.$store.state.heardname,
       isCollapse: false,
-      activePath: ""
+      activePath: "",
+      routname:'',
     };
   },
   created() {
@@ -62,28 +70,32 @@ export default {
     //获取路由权限标识符
     let nameList = this.$store.state.lore;
     let typedata = this.$store.state.platedata;
-    for (let i = 0; i < this.$router.options.routes[4].children.length; i++) 
-    {
-      let children = this.$router.options.routes[4].children[i]
+    for (let i = 0; i < this.$router.options.routes[4].children.length; i++) {
+      let children = this.$router.options.routes[4].children[i];
       let item = children.meta.role;
       let typenum = children.meta.typenub;
-      if (item.includes(nameList)) 
-      {
-        if(typenum.includes(typedata))
-        {
+      if (item.includes(nameList)) {
+        if (typenum.includes(typedata)) {
           getData.push(children);
         }
       }
     }
-    this.menulistdan=getData
+    this.menulistdan = getData;
   },
-   mounted() 
-  {
+  mounted() {},
+  
+  watch: {
+    $route: {
+      handler: function(route) {
+        this.routname = route.name
+      },
+      immediate: true
+    }
   },
   methods: {
     //退出
     loginout() {
-      this.$store.commit('allrestate')
+      this.$store.commit("allrestate");
       window.sessionStorage.clear();
       this.$router.push("/");
       /* this.$socket.close(); */
@@ -99,8 +111,7 @@ export default {
       } else {
         /*         获取返回的结果==200获取元素
          */
-        if (res.children === null) 
-        {
+        if (res.children === null) {
           this.menulistdan = res.data;
         }
         this.menulist = res.data;
@@ -115,17 +126,26 @@ export default {
     saveNavState(activePath) {
       window.sessionStorage.setItem("activePath", activePath);
       this.activePath = activePath;
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="less" slot-scope="scope">
+.yemei{
+  height: 24px;
+  
+  .el-breadcrumb{
+    line-height: 24px;
+    text-align: center;
+    padding-left: 10px;
+  }
+}
 .index {
   margin-bottom: 0;
   height: 100%;
   .el-header {
-    background-color: #e95420;
+    background-color: #38a9e7;
     color: rgb(255, 255, 255);
     line-height: 60px;
     display: flex;
@@ -138,8 +158,10 @@ export default {
         margin-left: 20px;
       }
     }
+    .el-button:hover {
+      color: #333;
+    }
   }
-
   .el-footer {
     background-color: #e5e4e4;
     color: #333;
@@ -147,7 +169,7 @@ export default {
     height: 20px;
   }
   .el-aside {
-    background-color: #ffffff;
+    background: #fff;
     color: #333;
     .el-menu {
       border-right: none;
@@ -155,12 +177,18 @@ export default {
   }
 
   .el-main {
-    background-color: #fdfdfd;
+    background: rgb(255, 255, 255);
     color: #333;
-    box-shadow: inset 0px 0px 4px 0px #929191;
+    box-shadow: inset 0px 0px 6px 0px #929191;
+    .router {
+      padding: 5px;
+      border-radius: 10px;
+      box-shadow: 1px 1px 4px 1px #929191;
+      // border: 2px solid rgba(17, 17, 17,0.5)
+    }
   }
   .toggle-button {
-    background-color: #ff6a00;
+    background-color: #1f6185;
     font-size: 10px;
     line-height: 24px;
     color: rgb(17, 17, 17);
