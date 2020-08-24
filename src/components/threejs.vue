@@ -1,13 +1,14 @@
 <template>
   <div>
     <div id="threed">
-    <div class="info">dsds</div>
+      <div class="info">dsds</div>
     </div>
   </div>
 </template>
 
 <script>
 import * as THREE from "three";
+import OrbitControls from 'three/examples/js/controls/OrbitControls'
 //调节动画工具
 import dat from "dat.gui";
 //加载模型插件
@@ -64,7 +65,7 @@ export default {
         object.scale.set(0.5, 0.5, 0.5);
         this.dapeng = object;
         this.scene.add(object);
-        this.renderer.render(this.scene, this.camera);
+        this.renderee();
       });
       //添加纹理
       //图片放置在静态文佳public中
@@ -113,10 +114,15 @@ export default {
       threed.appendChild(this.renderer.domElement);
       /* ==================== */
       //渲染器渲染场景，相机
-      this.renderer.render(this.scene, this.camera);
+      let sbcontrolss = new THREE.OrbitControls(this.camera, this.renderer.domElement)
+
+      sbcontrolss.addEventListener('change', this.renderee);//监听鼠标、键盘事件
     },
+    renderee(){
+        this.renderer.render(this.scene, this.camera);
+      },
     animate() {
-   /*    let { controls } = this;
+      /*    let { controls } = this;
       windowAPI 执行动画
       requestAnimationFrame(this.animate);
       //旋转
@@ -130,13 +136,13 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.info{
-    	position: absolute;
-	top: 10px;
-	width: 100%;
-	text-align: center;
-	z-index: 100;
-	display:block;
+.info {
+  position: absolute;
+  top: 10px;
+  width: 100%;
+  text-align: center;
+  z-index: 100;
+  display: block;
 }
 #threed {
   width: 1000px;
