@@ -108,7 +108,7 @@ export default {
       });
       //fbx导入
       let fbx_loader = new THREE.FBXLoader();
-      fbx_loader.load("lpgreenhouse/fan.fbx", (object) => {
+      fbx_loader.load("lpgreenhouse/fan1.fbx", (object) => {
         object.scale.set(3, 3, 3);
         object.position.x = 30;
         object.position.y = 10;
@@ -116,6 +116,7 @@ export default {
         this.scene.add(object);
         // obj作为参数创建一个混合器，解析播放obj及其子对象包含的动画数据
         this.mixer = new THREE.AnimationMixer(object);
+        console.log(object.animations);
         // obj.animations[0]：获得剪辑对象clip
         this.action = this.mixer.clipAction(object.animations[0]);
         // 缩放模型大小
@@ -196,15 +197,19 @@ export default {
     onMouseDblclick(event) {
       // 获取 raycaster 和所有模型相交的数组，其中的元素按照距离排序，越近的越靠前
       let intersects = this.getIntersects(event);
-      console.log(this.action.paused)
-      this.action.paused=true;
+      //console.log(this.action.paused);
+
       // 获取选中最近的 Mesh 对象
       if (
         intersects.length != 0 &&
         intersects[0].object instanceof THREE.Mesh
       ) {
-        this.selectObject = intersects[0].object;
-        this.changeMaterial(this.selectObject);
+        if (intersects[0].object.name === "fan_blades" ||intersects[0].object.name ==="fan_body") {
+          this.action.paused = !this.action.paused;
+        } else {
+          this.selectObject = intersects[0].object;
+          this.changeMaterial(this.selectObject);
+        }
       } else {
         console.log("未选中 Mesh!");
       }
