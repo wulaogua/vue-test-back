@@ -15,11 +15,11 @@ import FBXLoader from "three/examples/js/loaders/FBXLoader";
 import dat from "dat.gui";
 //加载模型插件
 import { MTLLoader, OBJLoader } from "three-obj-mtl-loader";
+import { ConeGeometry } from 'three';
 export default {
   data() {
     return {
       mixer: null,
-       mixer2: null,
       clock: null,
       action: null,
       action2: null,
@@ -112,29 +112,51 @@ export default {
       }); */
       //fbx导入
       let fbx_loader = new THREE.FBXLoader();
-      fbx_loader.load("lpgreenhouse/test2.fbx", (object) => {
+      fbx_loader.load("lpgreenhouse/text4.fbx", (object) => {
         object.scale.set(0.6, 0.6, 0.6);
-        object.position.x = -5;
-        object.position.y = 0;
-        object.position.z = 20;
-        this.scene.add(object);
         // obj作为参数创建一个混合器，解析播放obj及其子对象包含的动画数据
-        this.mixer = new THREE.AnimationMixer(object);
-        console.log(object)
         // obj.animations[0]：获得剪辑对象clip
-        console.log(object.animations);
+        object.animations[0].tracks.splice(0,1);
+        object.animations[0].tracks.splice(3,10);
+        object.animations[1].tracks.splice(0,4);
+        object.animations[1].tracks.splice(3,9);
+        object.animations[2].tracks.splice(0,7);
+        object.animations[2].tracks.splice(3,9);
+        object.animations[3].tracks.splice(0,11);
+        console.log(object.animations)
+        /*for(let ti = 1;ti<object.animations.length;ti++){
+           object.animations[ti].duration = object.animations[0].duration;
+           for(let tii = 0;tii<object.animations[ti].tracks.length;tii++){
+             object.animations[ti].tracks[tii].times = object.animations[0].tracks[0].times
+           }
+        } */
+        //let a1= object.animations[1].tracks[0].times[0];
+        /* for(let i =0;i<object.animations[1].tracks.length;i++){
+          for(let ii =0;ii<object.animations[1].tracks[i].times.length;ii++){
+            object.animations[1].tracks[i].times[ii]
+            object.animations[1].tracks[i].times[ii] = object.animations[1].tracks[i].times[ii]-a1
+          }
+        } */
+        
+        /* object.animations[1].tracks.forEach((item)=>{
+          item.times.forEach((time)=>{
+           time =  time -a1
+          })
+        }) */
+       // console.log(object.animations[1])
+        this.scene.add(object);
+        this.mixer = new THREE.AnimationMixer(object);
         this.action = this.mixer.clipAction(object.animations[0]);
         this.action2 = this.mixer.clipAction(object.animations[1]);
         this.action3 = this.mixer.clipAction(object.animations[2]);
         this.action4 = this.mixer.clipAction(object.animations[3]);
+        //console.log(object.animations[1])
         // 缩放模型大小
         this.action.play();
-        console.log(this.action2.time)
-        this.action2.time=0.7 ;
         this.action2.play();
         this.action3.play();
         this.action4.play();
-        this.renderee();
+        this.renderee(); 
       });
       //添加纹理
       //图片放置在静态文佳public中
