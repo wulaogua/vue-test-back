@@ -19,8 +19,12 @@ export default {
   data() {
     return {
       mixer: null,
+       mixer2: null,
       clock: null,
       action: null,
+      action2: null,
+      action3: null,
+      action4: null,
       divele: null,
       camera: null,
       scene: null,
@@ -57,7 +61,7 @@ export default {
       this.scene = new THREE.Scene();
       /* ==================== */
       //方体
-      let cubeGeometry = new THREE.BoxGeometry(5, 5, 5);
+      /*  let cubeGeometry = new THREE.BoxGeometry(5, 5, 5);
       let cubeMaterial = new THREE.MeshLambertMaterial({ color: 0xffee6b });
       this.cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
       this.cube.castShadow = true;
@@ -75,7 +79,7 @@ export default {
       this.cube1.position.x = 20;
       this.cube1.position.y = 10;
       this.cube1.position.z = 20;
-      this.scene.add(this.cube1);
+      this.scene.add(this.cube1); */
 
       //加载模型
       let mtlLoader = new MTLLoader();
@@ -96,7 +100,7 @@ export default {
         this.scene.add(object);
         this.renderee();
       }); */
-      mtlLoader.load("lpgreenhouse/11133.mtl", (materials) => {
+      /*  mtlLoader.load("lpgreenhouse/11133.mtl", (materials) => {
         materials.preload();
         objLoader.setMaterials(materials);
       });
@@ -105,22 +109,31 @@ export default {
         this.dapeng2 = object;
         this.scene.add(object);
         this.renderee();
-      });
+      }); */
       //fbx导入
       let fbx_loader = new THREE.FBXLoader();
-      fbx_loader.load("lpgreenhouse/fan1.fbx", (object) => {
-        object.scale.set(3, 3, 3);
-        object.position.x = 30;
-        object.position.y = 10;
+      fbx_loader.load("lpgreenhouse/test2.fbx", (object) => {
+        object.scale.set(0.6, 0.6, 0.6);
+        object.position.x = -5;
+        object.position.y = 0;
         object.position.z = 20;
         this.scene.add(object);
         // obj作为参数创建一个混合器，解析播放obj及其子对象包含的动画数据
         this.mixer = new THREE.AnimationMixer(object);
-        console.log(object.animations);
+        console.log(object)
         // obj.animations[0]：获得剪辑对象clip
+        console.log(object.animations);
         this.action = this.mixer.clipAction(object.animations[0]);
+        this.action2 = this.mixer.clipAction(object.animations[1]);
+        this.action3 = this.mixer.clipAction(object.animations[2]);
+        this.action4 = this.mixer.clipAction(object.animations[3]);
         // 缩放模型大小
         this.action.play();
+        console.log(this.action2.time)
+        this.action2.time=0.7 ;
+        this.action2.play();
+        this.action3.play();
+        this.action4.play();
         this.renderee();
       });
       //添加纹理
@@ -186,7 +199,7 @@ export default {
       //windowAPI 执行动画
       requestAnimationFrame(this.animate);
       //旋转
-      this.cube1.rotation.x += 0.06;
+      //this.cube1.rotation.x += 0.06;
       //渲染
       this.renderer.render(this.scene, this.camera);
       if (this.mixer !== null) {
@@ -198,18 +211,37 @@ export default {
       // 获取 raycaster 和所有模型相交的数组，其中的元素按照距离排序，越近的越靠前
       let intersects = this.getIntersects(event);
       //console.log(this.action.paused);
-
+      console.log(intersects);
       // 获取选中最近的 Mesh 对象
       if (
         intersects.length != 0 &&
         intersects[0].object instanceof THREE.Mesh
       ) {
-        if (intersects[0].object.name === "fan_blades" ||intersects[0].object.name ==="fan_body") {
+        switch (true) {
+          case intersects[0].object.name === "fan_blades" ||
+            intersects[0].object.name === "fan_body":
+            this.action.paused = !this.action.paused;
+            break;
+          case intersects[0].object.name === "fan_blades001" ||
+            intersects[0].object.name === "fan_body001":
+            this.action2.paused = !this.action2.paused;
+            break;
+          case intersects[0].object.name === "fan_blades002" ||
+            intersects[0].object.name === "fan_body002":
+            this.action3.paused = !this.action3.paused;
+            break;
+          case intersects[0].object.name === "fan_blades003" ||
+            intersects[0].object.name === "fan_body003":
+            this.action4.paused = !this.action4.paused;
+            break;
+        }
+
+        /*         if (intersects[0].object.name === "fan_blades" ||intersects[0].object.name ==="fan_body") {
           this.action.paused = !this.action.paused;
         } else {
           this.selectObject = intersects[0].object;
           this.changeMaterial(this.selectObject);
-        }
+        } */
       } else {
         console.log("未选中 Mesh!");
       }
