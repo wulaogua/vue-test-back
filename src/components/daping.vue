@@ -39,8 +39,8 @@
             </div>
             <div class="xinwenbody" v-for="o in xinwenlist" :key="o.id">
               <i class="el-icon-link"></i>
-              <a :href="o.href" target="_blank" class="xinwenbiaoti">{{o.name}}</a>
-             <!-- <div>{{o.body}}</div> -->
+              <a :href="o.url">{{o.title}}</a>
+              <div>{{o.body}}</div>
             </div>
           </el-col>
           <el-col>
@@ -117,7 +117,6 @@
               @ready="handler"
               ak="Wys7Yq0iibMhAVzAOVwKtRHRpeMQah3e"
             >
-            <!-- 这里改变跳动的点的定位-->
               <bm-marker
                 :position="{lng: 118.935335, lat: 31.822074}"
                 :dragging="true"
@@ -564,7 +563,33 @@ export default {
         ],
       },
       //农业新闻数据源地址
-      xinwenlist: [],
+      xinwenlist: [
+        {
+          title: "李平：养殖对虾带富村民",
+          body:
+            "2010年，李平从大连海事大学毕业后进入中海国际广州分公司从事远洋运输，跑国际线",
+          url: "#",
+        },
+        {
+          title: "挪威三文鱼价格趋于稳定",
+          body:
+            "挪威三文鱼价格在经历了长时间的下跌后，价格趋于稳定。最受追捧的三文鱼(重量在4",
+          url: "#",
+        },
+        {
+          title: "丹麦为保护鳕鱼种群签署行政命令",
+          body:
+            "为保护北海和斯卡格拉克的鱼类资源，丹麦国家的鳕鱼计划于2020年8月15日生效",
+          url: "#",
+        },
+        {
+          title:
+            "江苏省克氏原螯虾产业技术体系广陵推广示范基地举办稻虾综合种养技术培训班",
+          body:
+            "为了进一步加快江苏现代农业（克氏原螯虾）产业技术体系广陵推广示范基地建设，促进稻虾综合种养技术推广，助力实施脱贫攻坚和乡村振兴战略",
+          url: "#",
+        },
+      ],
       //时间1（不用改）
       timea: "",
       //时间2（不用改）
@@ -586,13 +611,12 @@ export default {
     //1.页面定时刷新1.2s
     //--1.刷新时间
     this.timedRefreshb();
-    this.xinwenpc();
   },
   mounted() {
     //初始化图标
     this.drawLine(this.echartdata[0]);
     //初始化农业新闻部分字数限制工能
-    
+    this.jiequzfc();
     this.$nextTick(() => {
       //初始化头部特效
       this.vueintro();
@@ -603,30 +627,10 @@ export default {
     this.attach();
   },
   methods: {
-    //新闻爬虫
-   async xinwenpc(){
-     const {data} =await this.$http.get('pachong');
-     if(data){
-       data.length = 10;
-       let aa =data;
-       for(let i=0;i<aa.length;i++)
-       {
-         if (aa[i].name.length > 20) {
-          aa[i].name = aa[i].name.substring(0, 23) + "...";
-        }
-       }
-       this.xinwenlist=aa;
-     }
-     else{
-       this.$message.error('获取新闻错误')
-     }
-    },
     //地图定位经纬度，zoom：缩放等级
     handler({ BMap, map }) {
-      //昆泰经纬度
-      //lng:118.972209 lat31.810735
       (this.center.lng = 118.935335),
-        (this.center.lat = 31.822074), 
+        (this.center.lat = 31.822074),
         (this.zoom = 17);
     },
     //实时数据部分改变标号进行的函数
@@ -834,22 +838,22 @@ export default {
       this.hls.destroy();
       this.hls1.destroy();
     },
-
+    //新闻标题缩减
+    jiequzfc() {
+      this.xinwenlist.forEach((item) => {
+        if (item.title.length > 26) {
+          item.title = item.title.substring(0, 26) + "...";
+        }
+        if (item.body.length > 26) {
+          item.body = item.body.substring(0, 26) + "...";
+        }
+      });
+    },
   },
 };
 </script>
 
 <style lang="less" scoped>
-.xinwenbiaoti{
-  padding-left: 5px;
-  color:#95d6ee;
-  transition: color 1s;
-  transition:font-size 0.5s;
-}
-.xinwenbiaoti:hover{
-  color:rgb(255, 255, 255);
-  font-size:1.02em
-}
 .cardph {
   height: 260px;
   margin-top: 1%;
@@ -861,8 +865,8 @@ export default {
     height: 160px;
     text-align: center;
     letter-spacing: 0.2em;
-    transition: border 1s;
-    transition: background 1s;
+    transform: border 1s;
+    transform: background 1s;
   }
   .el-card:hover {
     border: 1px solid rgba(255, 255, 255, 0.445);
@@ -933,7 +937,7 @@ export default {
 }
 .box-card {
   background: none;
-  transition: background 1s;
+  transform: background 1s;
 }
 .box-card:hover {
   background: rgba(255, 255, 255, 0.5);
