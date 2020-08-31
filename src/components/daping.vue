@@ -30,7 +30,6 @@
         <p class="date" v-if="datebool">{{ datea }} {{ timea }}</p>
       </el-col>
     </el-row>
-
     <el-row class="biaolan">
       <el-col :span="6" style="overflow:hidden;">
         <el-row class="zcb">
@@ -50,17 +49,17 @@
             </div>
             <div style="margin-top:40px;text-align:center;">
               <el-row :gutter="20" style="margin:1px">
-                <el-col :span="8" v-for="i in 3 " :key="i.id" class="noborad">
+                <el-col :span="8" v-for="i in tianqilist " :key="i.id" class="noborad">
                   <el-card class="box-card" style="color: rgb(51, 136, 255);">
                     <div slot="header">
-                      <span>7月5号今天</span>
+                      <span>{{i.date}}</span>
                     </div>
                     <div>
-                      <i class="el-icon-heavy-rain"></i>
+                      <i :class="i.icon"></i>
                     </div>
                     <div>
-                      <span style="color:rgb(170, 203, 248);">多云转小雨</span>
-                      <span style="color:red">22°-26°</span>
+                      <div style="color:rgb(170, 203, 248);">{{i.tianqi}}</div>
+                      <div style="color:red">{{i.qiwen}}</div>
                     </div>
                   </el-card>
                 </el-col>
@@ -71,13 +70,6 @@
             <div class="xinwentotle">
               <span>实时行情</span>
             </div>
-            <!-- <div class="t_btn2">
-              <el-table :data="tableData" height="240" border style="width: 100%">
-                <el-table-column prop="name" label="品名" width="80"></el-table-column>
-                <el-table-column prop="jiage" label="价格" width="100"></el-table-column>
-                <el-table-column prop="date" label="日期"></el-table-column>
-              </el-table>
-            </div>-->
             <dv-scroll-board :config="config" style="width:100%;height:240px" />
           </el-col>
         </el-row>
@@ -103,13 +95,14 @@
             <div>
               <el-row>
                 <el-col :span="8" class="cardph" v-for="y in cgcardlist" :key="y.i">
-                  <el-card class="box-card">
+                  <el-card sty>
                     <div slot="header" class="clearfix">
                       <span>{{y.id}}号槽</span>
                     </div>
                     <div>
                       <span class="cardvlu">{{y.vlu}}:</span>
                       <span class="carddata">{{y.data}}</span>
+                      <span style="color:rgb(130, 179, 247);padding-left: 3px;">{{y.fuhao}}</span>
                     </div>
                   </el-card>
                 </el-col>
@@ -176,7 +169,6 @@
   </div>
 </template>
 
-
 <script>
 import BaiduMap from "vue-baidu-map/components/map/Map.vue";
 import { BmMarker, BmMapType } from "vue-baidu-map";
@@ -185,32 +177,200 @@ export default {
   components: {
     BaiduMap,
     BmMarker,
-    BmMapType
+    BmMapType,
   },
   data() {
     return {
-      center: { lng: 0, lat: 0 },
-      zoom: 3,
-      datebool: true,
-      hls: "",
-      hls1: "",
-      cgcardlist: [
+      tianqilist: [
         {
-          id: 1,
-          vlu: "pH",
-          data: "4.5"
+          date: "8月31号今天",
+          icon: "el-icon-cloudy-and-sunny",
+          tianqi: "雷阵雨",
+          qiwen: "26°-34°",
         },
         {
-          id: 1,
-          vlu: "T",
-          data: "25"
+          date: "9月1号明天",
+          icon: "el-icon-lightning",
+          tianqi: "雷阵雨转多云",
+          qiwen: "26°-32°",
         },
         {
-          id: 1,
-          vlu: "DO",
-          data: "4.5"
-        }
+          date: "9月32号后天",
+          icon: "el-icon-cloudy-and-sunny",
+          tianqi: "多云",
+          qiwen: "24°-26°",
+        },
       ],
+      texti: 0,
+      sssjbt: null,
+      //地图定位经纬度（不用改）
+      center: { lng: 0, lat: 0 },
+      //地图（不用改）
+      zoom: 3,
+      //时间显示（不用改）
+      datebool: true,
+      //视频实例（不用改）
+      hls: "",
+      //视频实例（不用改）
+      hls1: "",
+      //实时数据数据源
+      sssjlist: [
+        [
+          {
+            id: 1,
+            vlu: "pH",
+            data: 4.5,
+          },
+          {
+            id: 1,
+            vlu: "温度",
+            data: "25",
+            fuhao: "℃",
+          },
+          {
+            id: 1,
+            vlu: "溶解氧",
+            data: "4.5",
+            fuhao: "mg/L",
+          },
+        ],
+        [
+          {
+            id: 2,
+            vlu: "pH",
+            data: "8",
+          },
+          {
+            id: 2,
+            vlu: "温度",
+            data: "1",
+            fuhao: "℃",
+          },
+          {
+            id: 2,
+            vlu: "溶解氧",
+            data: "10.5",
+            fuhao: "mg/L",
+          },
+        ],
+        [
+          {
+            id: 3,
+            vlu: "pH",
+            data: "6.5",
+          },
+          {
+            id: 3,
+            vlu: "温度",
+            data: "25.4",
+            fuhao: "℃",
+          },
+          {
+            id: 3,
+            vlu: "溶解氧",
+            data: "8.8",
+            fuhao: "mg/L",
+          },
+        ],
+        [
+          {
+            id: 4,
+            vlu: "pH",
+            data: "6.5",
+          },
+          {
+            id: 4,
+            vlu: "温度",
+            data: "25.7",
+            fuhao: "℃",
+          },
+          {
+            id: 4,
+            vlu: "溶解氧",
+            data: "6.8",
+            fuhao: "mg/L",
+          },
+        ],
+        [
+          {
+            id: 5,
+            vlu: "pH",
+            data: "6.5",
+          },
+          {
+            id: 5,
+            vlu: "温度",
+            data: "25.8",
+            fuhao: "℃",
+          },
+          {
+            id: 5,
+            vlu: "溶解氧",
+            data: "7.5",
+            fuhao: "mg/L",
+          },
+        ],
+        [
+          {
+            id: 6,
+            vlu: "pH",
+            data: "6.5",
+          },
+          {
+            id: 6,
+            vlu: "温度",
+            data: "25.2",
+            fuhao: "℃",
+          },
+          {
+            id: 6,
+            vlu: "溶解氧",
+            data: "5.5",
+            fuhao: "mg/L",
+          },
+        ],
+        [
+          {
+            id: 7,
+            vlu: "pH",
+            data: "4.2",
+          },
+          {
+            id: 7,
+            vlu: "温度",
+            data: "24.0",
+            fuhao: "℃",
+          },
+          {
+            id: 7,
+            vlu: "溶解氧",
+            data: "4.6",
+            fuhao: "mg/L",
+          },
+        ],
+        [
+          {
+            id: 8,
+            vlu: "pH",
+            data: 4.6,
+          },
+          {
+            id: 8,
+            vlu: "温度",
+            data: "24.8",
+            fuhao: "℃",
+          },
+          {
+            id: 8,
+            vlu: "溶解氧",
+            data: "4.8",
+            fuhao: "mg/L",
+          },
+        ],
+      ],
+      //实时数据当前数据
+      cgcardlist: [],
+      //数据统计数据源
       echartdata: [
         {
           title: "1号槽",
@@ -228,8 +388,8 @@ export default {
             "16:00",
             "18:00",
             "20:00",
-            "22:00"
-          ]
+            "22:00",
+          ],
         },
         {
           title: "2号槽",
@@ -247,8 +407,8 @@ export default {
             "16:00",
             "18:00",
             "20:00",
-            "22:00"
-          ]
+            "22:00",
+          ],
         },
         {
           title: "3号槽",
@@ -266,8 +426,8 @@ export default {
             "16:00",
             "18:00",
             "20:00",
-            "22:00"
-          ]
+            "22:00",
+          ],
         },
         {
           title: "4号槽",
@@ -285,8 +445,8 @@ export default {
             "16:00",
             "18:00",
             "20:00",
-            "22:00"
-          ]
+            "22:00",
+          ],
         },
         {
           title: "5号槽",
@@ -304,8 +464,8 @@ export default {
             "16:00",
             "18:00",
             "20:00",
-            "22:00"
-          ]
+            "22:00",
+          ],
         },
         {
           title: "6号槽",
@@ -323,8 +483,8 @@ export default {
             "16:00",
             "18:00",
             "20:00",
-            "22:00"
-          ]
+            "22:00",
+          ],
         },
         {
           title: "7号槽",
@@ -342,8 +502,8 @@ export default {
             "16:00",
             "18:00",
             "20:00",
-            "22:00"
-          ]
+            "22:00",
+          ],
         },
         {
           title: "8号槽",
@@ -361,75 +521,80 @@ export default {
             "16:00",
             "18:00",
             "20:00",
-            "22:00"
-          ]
-        }
+            "22:00",
+          ],
+        },
       ],
+      //视屏原数据地址
       Videolist: [
         {
           addr:
             "http://hls01open.ys7.com/openlive/833d6e5a7e334697aac99638d3203d42.m3u8",
           id: 1,
-          name: "阳澄湖木屋"
+          name: "阳澄湖木屋",
         },
         {
           addr:
             "http://hls01open.ys7.com/openlive/c1e7cef992584d8b988a459a3965683d.m3u8",
           id: 2,
-          name: "阳澄湖木屋左"
-        }
+          name: "阳澄湖木屋左",
+        },
       ],
-
+      //实时行情数据源地址
       config: {
         header: ["日期", "名称", "价格"],
         data: [
-        ["2016-05-03", "小鱼", "20/斤"],
-        ["2016-05-03", "小鱼", "20/斤"],
-        ["2016-05-03", "小鱼", "20/斤"],
-        ["2016-05-03", "小鱼", "20/斤"],
-        ["2016-05-03", "小鱼", "20/斤"],
-        ["2016-05-03", "小鱼", "20/斤"],
-        ["2016-05-03", "小鱼", "20/斤"],
-        ["2016-05-03", "小鱼", "20/斤"],
-        ["2016-05-03", "小鱼", "20/斤"],
-        ["2016-05-03", "小鱼", "20/斤"],
-        ["2016-05-03", "小鱼", "20/斤"],
-        ["2016-05-03", "小鱼", "20/斤"],
-        ["2016-05-03", "小鱼", "20/斤"],
-        ["2016-05-03", "小鱼", "20/斤"],
-        ["2016-05-03", "小鱼", "20/斤"],
-        ["2016-05-03", "小鱼", "20/斤"],]
-        
+          ["2020-08-31", "黄鳝", "30/斤"],
+          ["2020-08-31", "泥鳅", "6.6/斤"],
+          ["2020-08-31", "对虾", "23/斤"],
+          ["2020-08-31", "甲鱼", "27/斤"],
+          ["2020-08-31", "黑鱼", "10/斤"],
+          ["2020-08-31", "鲈鱼", "17.5/斤"],
+          ["2020-08-31", "罗飞", "3.2/斤"],
+          ["2020-08-31", "海参", "82/斤"],
+          ["2020-08-31", "鳜鱼", "31/斤"],
+          ["2020-08-31", "草鱼", "6.6/斤"],
+          ["2020-08-31", "鲤鱼", "5/斤"],
+          ["2020-08-31", "黄颡", "11.5/斤"],
+          ["2020-08-31", "鲫鱼", "8.5/斤"],
+          ["2020-08-31", "螃蟹", "26/斤"],
+          ["2020-08-31", "鲶鱼", "6.2/斤"],
+          ["2020-08-31", "龙虾", "22/斤"],
+        ],
       },
-
+      //农业新闻数据源地址
       xinwenlist: [
         {
-          title: "澳华！火爆背后的真相",
+          title: "李平：养殖对虾带富村民",
           body:
-            "中国水产频道独家报道，行业的单品爆品，养殖户的好口碑，是什么？",
-          url: "#"
+            "2010年，李平从大连海事大学毕业后进入中海国际广州分公司从事远洋运输，跑国际线",
+          url: "#",
         },
         {
-          title: "澳华！火爆背后的真相",
+          title: "挪威三文鱼价格趋于稳定",
           body:
-            "中国水产频道独家报道，行业的单品爆品，养殖户的好口碑，是什么？",
-          url: "#"
+            "挪威三文鱼价格在经历了长时间的下跌后，价格趋于稳定。最受追捧的三文鱼(重量在4",
+          url: "#",
         },
         {
-          title: "澳华！火爆背后的真相",
+          title: "丹麦为保护鳕鱼种群签署行政命令",
           body:
-            "中国水产频道独家报道，行业的单品爆品，养殖户的好口碑，是什么？",
-          url: "#"
+            "为保护北海和斯卡格拉克的鱼类资源，丹麦国家的鳕鱼计划于2020年8月15日生效",
+          url: "#",
         },
         {
-          title: "澳华！火爆背后的真相",
+          title:
+            "江苏省克氏原螯虾产业技术体系广陵推广示范基地举办稻虾综合种养技术培训班",
           body:
-            "中国水产频道独家报道，行业的单品爆品，养殖户的好口碑，是什么？",
-          url: "#"
-        }
+            "为了进一步加快江苏现代农业（克氏原螯虾）产业技术体系广陵推广示范基地建设，促进稻虾综合种养技术推广，助力实施脱贫攻坚和乡村振兴战略",
+          url: "#",
+        },
       ],
+      //时间1（不用改）
       timea: "",
+      //时间2（不用改）
       datea: "",
+      //时间3（不用改）
       weeka: [
         "星期天",
         "星期一",
@@ -437,29 +602,43 @@ export default {
         "星期三",
         "星期四",
         "星期五",
-        "星期六"
-      ]
+        "星期六",
+      ],
     };
   },
   created() {
+    //数据处理
+    //1.页面定时刷新1.2s
+    //--1.刷新时间
     this.timedRefreshb();
   },
   mounted() {
+    //初始化图标
     this.drawLine(this.echartdata[0]);
+    //初始化农业新闻部分字数限制工能
     this.jiequzfc();
-    //初始化视频
     this.$nextTick(() => {
+      //初始化头部特效
       this.vueintro();
+      //初始化实时数据
+      this.cgcardlist = this.sssjlist[0];
     });
+    //挂载视频
     this.attach();
   },
   methods: {
+    //地图定位经纬度，zoom：缩放等级
     handler({ BMap, map }) {
       (this.center.lng = 118.935335),
         (this.center.lat = 31.822074),
         (this.zoom = 17);
     },
-    sizechangeA(data) {},
+    //实时数据部分改变标号进行的函数
+    sizechangeA(data) {
+      this.sssjbt = data;
+      this.cgcardlist = this.sssjlist[data - 1];
+    },
+    //刷新函数
     timedRefreshb() {
       if (this.timer) {
         clearInterval(this.timer);
@@ -468,9 +647,31 @@ export default {
           this.datebool = false;
           this.updateTime();
           this.datebool = true;
+          this.shuju();
         }, 1200);
       }
     },
+    //实时数据获取函数
+    shuju() {
+      if (this.sssjbt) {
+        if (this.texti < 14) {
+          this.texti += 1;
+        } else {
+          this.texti = 0;
+        }
+        this.sssjlist[this.sssjbt - 1][0].data = this.texti;
+        this.cgcardlist = this.sssjlist[this.sssjbt - 1];
+      } else {
+        if (this.texti < 14) {
+          this.texti += 1;
+        } else {
+          this.texti = 0;
+        }
+        this.sssjlist[0][0].data = this.texti;
+        this.cgcardlist = this.sssjlist[0];
+      }
+    },
+    //时间显示相关
     updateTime() {
       let cd = new Date();
       this.timea =
@@ -488,6 +689,7 @@ export default {
         " " +
         this.weeka[cd.getDay()];
     },
+    //时间显示相关
     zeroPadding(num, digit) {
       var zero = "";
       for (var i = 0; i < digit; i++) {
@@ -496,12 +698,14 @@ export default {
       return (zero + num).slice(-digit);
     },
     ///////////////////////
+    //数据统计改变标号触发的函数
     sizechange(data) {
       let myChart = this.$echarts.init(document.getElementById("dpmyChart"));
       myChart.clear();
       this.drawLine(this.echartdata[data - 1]);
       // console.log("data", data);
     },
+    //绘制曲线
     drawLine(data) {
       // 基于准备好的dom，初始化echarts实例
       let myChart = this.$echarts.init(document.getElementById("dpmyChart"));
@@ -511,28 +715,28 @@ export default {
         title: {
           text: data.title,
           textStyle: {
-            color: "#fff"
-          }
+            color: "#fff",
+          },
         },
         tooltip: {
-          trigger: "axis"
+          trigger: "axis",
         },
         legend: {
           data: ["溶解氧", "pH值"],
           textStyle: {
-            color: "#fff"
-          }
+            color: "#fff",
+          },
         },
         grid: {
           left: "3%",
           right: "4%",
           bottom: "3%",
-          containLabel: true
+          containLabel: true,
         },
         toolbox: {
           feature: {
-            saveAsImage: {}
-          }
+            saveAsImage: {},
+          },
         },
         xAxis: {
           type: "category",
@@ -541,28 +745,28 @@ export default {
           axisLabel: {
             textStyle: {
               //改变刻度字体样式
-              color: "#fff"
-            }
+              color: "#fff",
+            },
           },
           axisLine: {
             lineStyle: {
-              color: "#fff"
-            }
-          }
+              color: "#fff",
+            },
+          },
         },
         yAxis: {
           type: "value",
           axisLine: {
             lineStyle: {
-              color: "#fff"
-            }
+              color: "#fff",
+            },
           },
           axisLabel: {
             textStyle: {
               //改变刻度字体样式
-              color: "#fff"
-            }
-          }
+              color: "#fff",
+            },
+          },
         },
         series: [
           {
@@ -574,32 +778,33 @@ export default {
               normal: {
                 color: "#8cd5c2", //改变折线点的颜色
                 lineStyle: {
-                  color: "#8cd5c2" //改变折线颜色
-                }
-              }
-            }
+                  color: "#8cd5c2", //改变折线颜色
+                },
+              },
+            },
           },
           {
             name: "pH值",
             type: "line",
             data: data.phvalue,
-            smooth: true
-          }
-        ]
+            smooth: true,
+          },
+        ],
       };
       // 窗口大小自适应方案
       myChart.setOption(option);
-      setTimeout(function() {
-        window.onresize = function() {
+      setTimeout(function () {
+        window.onresize = function () {
           myChart.resize();
         };
       }, 200);
     },
-
+    //初始化头部特效
     vueintro() {
       let vintro = require("intro.js");
       vintro().start();
     },
+    //视频加载
     attach() {
       //新建实例
       this.hls = new Hls();
@@ -627,14 +832,15 @@ export default {
         //this.$message.error("挂载失败：" + this.message.channelName);
       });
     },
+    //退出后销毁
     beforeDestroy() {
       //销毁
       this.hls.destroy();
       this.hls1.destroy();
     },
-
+    //新闻标题缩减
     jiequzfc() {
-      this.xinwenlist.forEach(item => {
+      this.xinwenlist.forEach((item) => {
         if (item.title.length > 26) {
           item.title = item.title.substring(0, 26) + "...";
         }
@@ -642,47 +848,62 @@ export default {
           item.body = item.body.substring(0, 26) + "...";
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="less" scoped>
 .cardph {
   height: 260px;
-  margin-top: 5%;
+  margin-top: 1%;
+
   .el-card {
-    height: 260px;
+    background-color: rgba(151, 151, 151, 0.4);
+    border: 0;
+    margin: 10px;
+    height: 160px;
     text-align: center;
     letter-spacing: 0.2em;
+    transform: border 1s;
+    transform: background 1s;
+  }
+  .el-card:hover {
+    border: 1px solid rgba(255, 255, 255, 0.445);
+    background-color: rgba(255, 255, 255, 0.5);
   }
   .clearfix {
-    font-size: 1.8em;
+    font-size: 1.2em;
     color: rgb(130, 179, 247);
   }
   .cardvlu {
-    font-size: 3em;
+    font-weight: 700;
+    line-height: 110px;
+    font-size: 1.8em;
     color: rgb(130, 179, 247);
   }
   .carddata {
-    font-size: 7em;
+    font-weight: 700;
+    font-size: 2em;
     color: rgb(194, 53, 49);
+    padding-left: 3px;
   }
 }
 .shuju {
   width: 98%;
-  height: 450px;
+  height: 250px;
   margin: 10px;
   border: 2px solid rgb(149, 214, 238);
 }
 .ditu {
-  height: 500px;
+  height: 700px;
   margin: 0px 5px;
 }
 .bm-view {
   border-top: 2px solid rgba(170, 203, 248, 0.5);
   width: 99%;
-  height: 480px;
+  height: 680px;
+  padding: 2px 0px;
 }
 .date {
   color: #daf6ff;
@@ -714,8 +935,12 @@ export default {
 .el-table {
   color: rgb(170, 203, 248);
 }
-.el-card {
+.box-card {
   background: none;
+  transform: background 1s;
+}
+.box-card:hover {
+  background: rgba(255, 255, 255, 0.5);
 }
 .xinwentotle /deep/ .el-pager li {
   font-size: 5px;
@@ -729,33 +954,6 @@ export default {
   border: 1px solid rgba(255, 255, 255, 0.7);
 }
 
-.t_btn2 /deep/ .el-table,
-.el-table__expanded-cell {
-  background-color: transparent;
-}
-.t_btn2 /deep/ .el-table thead {
-  color: rgb(130, 179, 247);
-}
-.t_btn2 /deep/ .el-table tr {
-  background-color: transparent !important;
-}
-
-.t_btn2 /deep/ .el-table th {
-  background-color: transparent !important;
-}
-
-.t_btn2 /deep/ .el-table__row > td {
-  border: none;
-}
-.t_btn2 /deep/ .el-table--border th {
-  border-right: none;
-}
-.t_btn2 /deep/ .el-table--border {
-  border: none;
-}
-.t_btn2 /deep/ .el-table--border::after {
-  background-color: transparent !important;
-}
 /* 清除底部横线 */
 .el-table::before {
   height: 0px;
