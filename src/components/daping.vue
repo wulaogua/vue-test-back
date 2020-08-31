@@ -33,14 +33,13 @@
     <el-row class="biaolan">
       <el-col :span="6" style="overflow:hidden;">
         <el-row class="zcb">
-          <el-col class="xinwen">
+          <el-col class="xinwen" v-loading="login1"  element-loading-background="rgba(0, 0, 0, 0.2)">
             <div class="xinwentotle">
               <span>农业新闻</span>
             </div>
-            <div class="xinwenbody" v-for="o in xinwenlist" :key="o.id">
+            <div class="xinwenbody" v-for="o in xinwenlist" :key="o.id" >
               <i class="el-icon-link"></i>
               <a :href="o.href" target="_blank" class="xinwenbiaoti">{{o.name}}</a>
-             <!-- <div>{{o.body}}</div> -->
             </div>
           </el-col>
           <el-col>
@@ -182,6 +181,7 @@ export default {
   },
   data() {
     return {
+      login1:true,
       tianqilist: [
         {
           date: "8月31号今天",
@@ -586,6 +586,7 @@ export default {
     //1.页面定时刷新1.2s
     //--1.刷新时间
     this.timedRefreshb();
+    //新闻数据
     this.xinwenpc();
   },
   mounted() {
@@ -616,6 +617,7 @@ export default {
         }
        }
        this.xinwenlist=aa;
+       this.login1=false;
      }
      else{
        this.$message.error('获取新闻错误')
@@ -693,7 +695,7 @@ export default {
       }
       return (zero + num).slice(-digit);
     },
-    ///////////////////////
+    //////////////////////////
     //数据统计改变标号触发的函数
     sizechange(data) {
       let myChart = this.$echarts.init(document.getElementById("dpmyChart"));
