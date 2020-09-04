@@ -33,11 +33,11 @@
     <el-row class="biaolan">
       <el-col :span="6" style="overflow:hidden;">
         <el-row class="zcb">
-          <el-col class="xinwen" v-loading="login1"  element-loading-background="rgba(0, 0, 0, 0.2)">
+          <el-col class="xinwen" v-loading="login1" element-loading-background="rgba(0, 0, 0, 0.2)">
             <div class="xinwentotle">
               <span>农业新闻</span>
             </div>
-            <div class="xinwenbody" v-for="o in xinwenlist" :key="o.id" >
+            <div class="xinwenbody" v-for="o in xinwenlist" :key="o.id">
               <i class="el-icon-link"></i>
               <a :href="o.href" target="_blank" class="xinwenbiaoti">{{o.name}}</a>
             </div>
@@ -65,11 +65,11 @@
               </el-row>
             </div>
           </el-col>
-          <el-col>
+          <el-col v-loading="login2" element-loading-background="rgba(0, 0, 0, 0.2)">
             <div class="xinwentotle">
               <span>实时行情</span>
             </div>
-            <dv-scroll-board :config="config" style="width:100%;height:240px" />
+            <dv-scroll-board :config="config" style="width:100%;height:240px" v-if='hangqi' />
           </el-col>
         </el-row>
       </el-col>
@@ -85,7 +85,7 @@
                   <el-pagination
                     background
                     layout="pager"
-                    :total="80"
+                    :total="50"
                     @current-change="sizechangeA"
                   ></el-pagination>
                 </el-col>
@@ -116,7 +116,7 @@
               @ready="handler"
               ak="Wys7Yq0iibMhAVzAOVwKtRHRpeMQah3e"
             >
-            <!-- 这里改变跳动的点的定位-->
+              <!-- 这里改变跳动的点的定位-->
               <bm-marker
                 :position="{lng: 118.935335, lat: 31.822074}"
                 :dragging="true"
@@ -139,7 +139,7 @@
                   <span>数据统计</span>
                 </el-col>
                 <el-col :span="18" class="noborad">
-                  <el-pagination background layout="pager" :total="80" @current-change="sizechange"></el-pagination>
+                  <el-pagination background layout="pager" :total="50" @current-change="sizechange"></el-pagination>
                 </el-col>
               </el-row>
             </div>
@@ -173,6 +173,7 @@
 import BaiduMap from "vue-baidu-map/components/map/Map.vue";
 import { BmMarker, BmMapType } from "vue-baidu-map";
 import Hls from "hls.js";
+import { ConeGeometry } from 'three';
 export default {
   components: {
     BaiduMap,
@@ -181,27 +182,10 @@ export default {
   },
   data() {
     return {
-      login1:true,
-      tianqilist: [
-        {
-          date: "8月31号今天",
-          icon: "el-icon-cloudy-and-sunny",
-          tianqi: "雷阵雨",
-          qiwen: "26°-34°",
-        },
-        {
-          date: "9月1号明天",
-          icon: "el-icon-lightning",
-          tianqi: "雷阵雨转多云",
-          qiwen: "26°-32°",
-        },
-        {
-          date: "9月32号后天",
-          icon: "el-icon-cloudy-and-sunny",
-          tianqi: "多云",
-          qiwen: "24°-26°",
-        },
-      ],
+      hangqi:true,
+      login1: true,
+      login2:true,
+      tianqilist: [],
       texti: 0,
       sssjbt: null,
       //地图定位经纬度（不用改）
@@ -220,18 +204,18 @@ export default {
           {
             id: 1,
             vlu: "pH",
-            data: 4.5,
+            data: 7.2,
           },
           {
             id: 1,
             vlu: "温度",
-            data: "25",
+            data: "31.1",
             fuhao: "℃",
           },
           {
             id: 1,
             vlu: "溶解氧",
-            data: "4.5",
+            data: "9.1",
             fuhao: "mg/L",
           },
         ],
@@ -239,132 +223,75 @@ export default {
           {
             id: 2,
             vlu: "pH",
-            data: "8",
-          },
-          {
-            id: 2,
-            vlu: "温度",
-            data: "1",
-            fuhao: "℃",
-          },
-          {
-            id: 2,
-            vlu: "溶解氧",
-            data: "10.5",
-            fuhao: "mg/L",
-          },
-        ],
-        [
-          {
-            id: 3,
-            vlu: "pH",
-            data: "6.5",
-          },
-          {
-            id: 3,
-            vlu: "温度",
-            data: "25.4",
-            fuhao: "℃",
-          },
-          {
-            id: 3,
-            vlu: "溶解氧",
-            data: "8.8",
-            fuhao: "mg/L",
-          },
-        ],
-        [
-          {
-            id: 4,
-            vlu: "pH",
-            data: "6.5",
-          },
-          {
-            id: 4,
-            vlu: "温度",
-            data: "25.7",
-            fuhao: "℃",
-          },
-          {
-            id: 4,
-            vlu: "溶解氧",
-            data: "6.8",
-            fuhao: "mg/L",
-          },
-        ],
-        [
-          {
-            id: 5,
-            vlu: "pH",
-            data: "6.5",
-          },
-          {
-            id: 5,
-            vlu: "温度",
-            data: "25.8",
-            fuhao: "℃",
-          },
-          {
-            id: 5,
-            vlu: "溶解氧",
             data: "7.5",
+          },
+          {
+            id: 2,
+            vlu: "温度",
+            data: "31.05",
+            fuhao: "℃",
+          },
+          {
+            id: 2,
+            vlu: "溶解氧",
+            data: "7.7",
             fuhao: "mg/L",
           },
         ],
         [
           {
-            id: 6,
+            id: 3,
             vlu: "pH",
-            data: "6.5",
+            data: "7.6",
           },
           {
-            id: 6,
+            id: 3,
             vlu: "温度",
-            data: "25.2",
+            data: "31.15",
             fuhao: "℃",
           },
           {
-            id: 6,
+            id: 3,
             vlu: "溶解氧",
-            data: "5.5",
+            data: "7.9",
             fuhao: "mg/L",
           },
         ],
         [
           {
-            id: 7,
+            id: 4,
             vlu: "pH",
-            data: "4.2",
+            data: "7.6",
           },
           {
-            id: 7,
+            id: 4,
             vlu: "温度",
-            data: "24.0",
+            data: "31.16",
             fuhao: "℃",
           },
           {
-            id: 7,
+            id: 4,
             vlu: "溶解氧",
-            data: "4.6",
+            data: "9.0",
             fuhao: "mg/L",
           },
         ],
         [
           {
-            id: 8,
+            id: 5,
             vlu: "pH",
-            data: 4.6,
+            data: "7.5",
           },
           {
-            id: 8,
+            id: 5,
             vlu: "温度",
-            data: "24.8",
+            data: "31.11",
             fuhao: "℃",
           },
           {
-            id: 8,
+            id: 5,
             vlu: "溶解氧",
-            data: "4.8",
+            data: "8.7",
             fuhao: "mg/L",
           },
         ],
@@ -375,8 +302,21 @@ export default {
       echartdata: [
         {
           title: "1号槽",
-          codvalue: [4, 5, 5, 7, 4, 3, 3, 8, 6, 4, 5, 3],
-          phvalue: [7, 6, 5, 3, 4, 6, 7, 8, 2, 5, 6, 7],
+          codvalue: [
+            2.2,
+            1.9,
+            1.7,
+            1.9,
+            3.7,
+            6.1,
+            8.2,
+            8.6,
+            9.0,
+            6.4,
+            4.7,
+            3.7,
+          ],
+          phvalue: [7.2, 7.2, 7.2, 7.5, 7.6, 7.7, 7.2, 7.7, 7.3, 8.1, 7.3, 7.5],
           time: [
             "0:00",
             "2:00",
@@ -394,8 +334,8 @@ export default {
         },
         {
           title: "2号槽",
-          codvalue: [4, 5, 6, 8, 4, 4, 3, 2, 6, 4, 5, 3],
-          phvalue: [7.1, 7.7, 7.8, 7.9, 6.5, 6.4, 6.2, 5.8, 5.4, 4.2, 7.5, 6.1],
+          codvalue: [2.2, 1.8, 1.9, 2, 3.5, 5.1, 8.6, 8.7, 9.0, 6.3, 4.2, 3.2],
+          phvalue: [7.5, 7.2, 7.6, 7.5, 7.6, 7.2, 7.4, 7.1, 7.6, 7.7, 7.4, 7.6],
           time: [
             "0:00",
             "2:00",
@@ -413,8 +353,8 @@ export default {
         },
         {
           title: "3号槽",
-          codvalue: [4, 5, 5, 7, 7, 3, 4, 8, 3, 7, 5, 3],
-          phvalue: [7.1, 7.7, 7.8, 7.9, 6.5, 6.4, 6.2, 5.8, 5.4, 4.2, 7.5, 6.1],
+          codvalue: [2, 1.5, 1.6, 1.9, 4, 7, 8.7, 8.9, 9.2, 6.1, 4.2, 2.2],
+          phvalue: [7.2, 7.4, 7.3, 7.7, 7.4, 7.3, 7.4, 7.4, 7.5, 7.6, 7.4, 7.3],
           time: [
             "0:00",
             "2:00",
@@ -432,8 +372,8 @@ export default {
         },
         {
           title: "4号槽",
-          codvalue: [4, 5, 5, 5, 5, 3, 4, 5, 3, 7, 5, 3],
-          phvalue: [7.1, 7.7, 7.8, 7.9, 6.5, 6.4, 6.2, 5.8, 5.4, 4.2, 7.5, 6.1],
+          codvalue: [2.6, 1.0, 1.9, 3.0, 4.2, 7.5, 9, 9.1, 9.2, 6.5, 3.9, 2.0],
+          phvalue: [7.6, 7.7, 7.6, 7.5, 7.4, 7.3, 7.6, 7.5, 7.3, 7.2, 7.2, 7.6],
           time: [
             "0:00",
             "2:00",
@@ -451,65 +391,8 @@ export default {
         },
         {
           title: "5号槽",
-          codvalue: [4, 5, 2, 7, 7, 3, 4, 3, 3, 2, 5, 3],
-          phvalue: [7.1, 7.7, 7.8, 7.9, 6.5, 6.4, 6.2, 5.8, 5.4, 4.2, 7.5, 6.1],
-          time: [
-            "0:00",
-            "2:00",
-            "4:00",
-            "6:00",
-            "8:00",
-            "10:00",
-            "12:00",
-            "14:00",
-            "16:00",
-            "18:00",
-            "20:00",
-            "22:00",
-          ],
-        },
-        {
-          title: "6号槽",
-          codvalue: [4, 5, 1, 7, 7, 3, 4, 8, 3, 3, 5, 3],
-          phvalue: [7.1, 7.7, 7.8, 7.9, 6.5, 6.4, 6.2, 5.8, 5.4, 4.2, 7.5, 6.1],
-          time: [
-            "0:00",
-            "2:00",
-            "4:00",
-            "6:00",
-            "8:00",
-            "10:00",
-            "12:00",
-            "14:00",
-            "16:00",
-            "18:00",
-            "20:00",
-            "22:00",
-          ],
-        },
-        {
-          title: "7号槽",
-          codvalue: [4, 5, 5, 2, 7, 3, 4, 8, 3, 3, 5, 3],
-          phvalue: [7.1, 7.7, 7.8, 7.9, 6.5, 6.4, 6.2, 5.8, 5.4, 4.2, 7.5, 6.1],
-          time: [
-            "0:00",
-            "2:00",
-            "4:00",
-            "6:00",
-            "8:00",
-            "10:00",
-            "12:00",
-            "14:00",
-            "16:00",
-            "18:00",
-            "20:00",
-            "22:00",
-          ],
-        },
-        {
-          title: "8号槽",
-          codvalue: [4, 5, 6, 7, 7, 7, 8, 8, 6, 7, 5, 3],
-          phvalue: [7.1, 7.7, 7.8, 7.9, 6.5, 6.4, 6.2, 5.8, 5.4, 4.2, 7.5, 6.1],
+          codvalue: [1.2, 1.0, 3.2, 3.5, 5, 6.5, 7.8, 7.6, 7.7, 6.2, 4.2, 2.0],
+          phvalue: [7.2, 7.5, 7.7, 7.3, 7.6, 7.5, 7.4, 7.5, 7.4, 7.3, 7.5, 7.2],
           time: [
             "0:00",
             "2:00",
@@ -544,24 +427,7 @@ export default {
       //实时行情数据源地址
       config: {
         header: ["日期", "名称", "价格"],
-        data: [
-          ["2020-08-31", "黄鳝", "30/斤"],
-          ["2020-08-31", "泥鳅", "6.6/斤"],
-          ["2020-08-31", "对虾", "23/斤"],
-          ["2020-08-31", "甲鱼", "27/斤"],
-          ["2020-08-31", "黑鱼", "10/斤"],
-          ["2020-08-31", "鲈鱼", "17.5/斤"],
-          ["2020-08-31", "罗飞", "3.2/斤"],
-          ["2020-08-31", "海参", "82/斤"],
-          ["2020-08-31", "鳜鱼", "31/斤"],
-          ["2020-08-31", "草鱼", "6.6/斤"],
-          ["2020-08-31", "鲤鱼", "5/斤"],
-          ["2020-08-31", "黄颡", "11.5/斤"],
-          ["2020-08-31", "鲫鱼", "8.5/斤"],
-          ["2020-08-31", "螃蟹", "26/斤"],
-          ["2020-08-31", "鲶鱼", "6.2/斤"],
-          ["2020-08-31", "龙虾", "22/斤"],
-        ],
+        data: [],
       },
       //农业新闻数据源地址
       xinwenlist: [],
@@ -587,13 +453,16 @@ export default {
     //--1.刷新时间
     this.timedRefreshb();
     //新闻数据
+    this.hangqi=false;
     this.xinwenpc();
+    this.tianqipc();
+    this.hangqingpc();
   },
   mounted() {
     //初始化图标
     this.drawLine(this.echartdata[0]);
     //初始化农业新闻部分字数限制工能
-    
+
     this.$nextTick(() => {
       //初始化头部特效
       this.vueintro();
@@ -604,31 +473,67 @@ export default {
     this.attach();
   },
   methods: {
+    //行情
+    async hangqingpc() {
+      const { data } = await this.$http.get("pachongshuichan");
+       if (data) { 
+         this.config.data=data;
+         this.hangqi=true;
+         this.login2=false;
+      } else {
+        this.$message.error("获取新闻错误");
+      }
+    },
     //新闻爬虫
-   async xinwenpc(){
-     const {data} =await this.$http.get('pachong');
-     if(data){
-       data.length = 10;
-       let aa =data;
-       for(let i=0;i<aa.length;i++)
-       {
-         if (aa[i].name.length > 20) {
-          aa[i].name = aa[i].name.substring(0, 23) + "...";
+    async xinwenpc() {
+      const { data } = await this.$http.get("pachong");
+      if (data) {
+        data.length = 10;
+        let aa = data;
+        for (let i = 0; i < aa.length; i++) {
+          if (aa[i].name.length > 20) {
+            aa[i].name = aa[i].name.substring(0, 23) + "...";
+          }
         }
-       }
-       this.xinwenlist=aa;
-       this.login1=false;
-     }
-     else{
-       this.$message.error('获取新闻错误')
-     }
+        this.xinwenlist = aa;
+        this.login1 = false;
+      } else {
+        this.$message.error("获取新闻错误");
+      }
+    },
+    async tianqipc() {
+      const { data } = await this.$http.get("pachongtianqi");
+      if (data) {
+        let datalist = data;
+        console.log(datalist);
+        for (let i = 0; i < datalist.length; i++) {
+          switch (true) {
+            case datalist[i].icon === "d00":
+              datalist[i].icon = "el-icon-sunny";
+              break;
+            case datalist[i].icon === "d01":
+              datalist[i].icon = "el-icon-cloudy-and-sunny";
+              break;
+          }
+        }
+        for (let i = 0; i < data.length; i++) {
+          this.tianqilist[i] = {
+            date: datalist[i].date,
+            icon: datalist[i].icon,
+            tianqi: datalist[i].wea,
+            qiwen: datalist[i].temp,
+          };
+        }
+      } else {
+        this.$message.error("获取天气错误");
+      }
     },
     //地图定位经纬度，zoom：缩放等级
     handler({ BMap, map }) {
       //昆泰经纬度
       //lng:118.972209 lat31.810735
       (this.center.lng = 118.935335),
-        (this.center.lat = 31.822074), 
+        (this.center.lat = 31.822074),
         (this.zoom = 17);
     },
     //实时数据部分改变标号进行的函数
@@ -645,7 +550,7 @@ export default {
           this.datebool = false;
           this.updateTime();
           this.datebool = true;
-          this.shuju();
+          //this.shuju();
         }, 1200);
       }
     },
@@ -836,21 +741,20 @@ export default {
       this.hls.destroy();
       this.hls1.destroy();
     },
-
   },
 };
 </script>
 
 <style lang="less" scoped>
-.xinwenbiaoti{
+.xinwenbiaoti {
   padding-left: 5px;
-  color:#95d6ee;
+  color: #95d6ee;
   transition: color 1s;
-  transition:font-size 0.5s;
+  transition: font-size 0.5s;
 }
-.xinwenbiaoti:hover{
-  color:rgb(255, 255, 255);
-  font-size:1.02em
+.xinwenbiaoti:hover {
+  color: rgb(255, 255, 255);
+  font-size: 1.02em;
 }
 .cardph {
   height: 260px;
