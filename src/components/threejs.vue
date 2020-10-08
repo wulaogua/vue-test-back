@@ -1,13 +1,16 @@
 <template>
   <div>
     <div id="threed">
-      <div class="info">dsds</div>
+      <div class="info" v-show="threevideo">
+        <video class="videostyle" ref="video1" controls></video>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import * as THREE from "three";
+import Hls from "hls.js";
 import { OrbitControls } from "three/examples/js/controls/OrbitControls";
 import FBXLoader from "three/examples/js/loaders/FBXLoader";
 //import "three/examples/js/libs/inflate.min.js";
@@ -15,10 +18,13 @@ import FBXLoader from "three/examples/js/loaders/FBXLoader";
 import dat from "dat.gui";
 //加载模型插件
 import { MTLLoader, OBJLoader } from "three-obj-mtl-loader";
-import { ConeGeometry } from 'three';
+import { ConeGeometry } from "three";
 export default {
   data() {
     return {
+      threevideo:true,
+      hls:'',
+      statu:"",
       mixer: null,
       clock: null,
       action: null,
@@ -40,14 +46,48 @@ export default {
       dapeng2: null,
     };
   },
-  created() {},
+  created() {
+    
+  },
   mounted() {
+    this.$nextTick(() => {
+      this.threevideo=false,
+      this.vueintro();
+    });
+    this.attach();
     //this.initgui();
     this.addtd();
     this.clock = new THREE.Clock();
     this.animate();
   },
+   beforeDestroy() {
+      //销毁
+      this.hls.destroy();
+  },
   methods: {
+    vueintro() {
+      let vintro = require("intro.js");
+      vintro().start();
+    },
+    attach() {
+        //新建实例
+        this.hls = new Hls
+        //挂载Video标签
+        this.hls.attachMedia(
+          this.$refs.video1
+        );
+        //挂载视频源
+        this.hls.loadSource('http://hls01open.ys7.com/openlive/4c11c208cc9645dbbcdcee8155a5508a.m3u8');
+        //挂载成功
+        this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          this.statu = true;
+        });
+        //挂载失败
+        this.hls.on(Hls.Events.ERROR, (event, data) => {
+          this.statu = false;
+          //this.$message.error("挂载失败：" + this.message.channelName);
+        });
+    },
     initgui() {
       const gui = new dat.GUI(); // gui监测器
       gui.add(this.controls, "rotationSpeed", 0, 1);
@@ -112,59 +152,31 @@ export default {
       }); */
       //fbx导入
       let fbx_loader = new THREE.FBXLoader();
-      fbx_loader.load("lpgreenhouse/text4.fbx", (object) => {
+      fbx_loader.load("lpgreenhouse/test123.fbx", (object) => {
         object.scale.set(0.6, 0.6, 0.6);
         // obj作为参数创建一个混合器，解析播放obj及其子对象包含的动画数据
         // obj.animations[0]：获得剪辑对象clip
-        object.animations[0].tracks.splice(0,1);
-        object.animations[0].tracks.splice(3,10);
-        object.animations[1].tracks.splice(0,4);
-        object.animations[1].tracks.splice(3,9);
-        object.animations[2].tracks.splice(0,7);
-        object.animations[2].tracks.splice(3,9);
-        object.animations[3].tracks.splice(0,11);
-        console.log(object.animations)
-        /*for(let ti = 1;ti<object.animations.length;ti++){
-           object.animations[ti].duration = object.animations[0].duration;
-           for(let tii = 0;tii<object.animations[ti].tracks.length;tii++){
-             object.animations[ti].tracks[tii].times = object.animations[0].tracks[0].times
-           }
-        } */
-        //let a1= object.animations[1].tracks[0].times[0];
-        /* for(let i =0;i<object.animations[1].tracks.length;i++){
-          for(let ii =0;ii<object.animations[1].tracks[i].times.length;ii++){
-            object.animations[1].tracks[i].times[ii]
-            object.animations[1].tracks[i].times[ii] = object.animations[1].tracks[i].times[ii]-a1
-          }
-        } */
-        
-        /* object.animations[1].tracks.forEach((item)=>{
-          item.times.forEach((time)=>{
-           time =  time -a1
-          })
-        }) */
-       // console.log(object.animations[1])
+        // console.log(object);
+        object.animations[0].tracks.splice(0, 1);
+        object.animations[0].tracks.splice(3, 10);
+        object.animations[1].tracks.splice(0, 4);
+        object.animations[1].tracks.splice(3, 9);
+        object.animations[2].tracks.splice(0, 7);
+        object.animations[2].tracks.splice(3, 9);
+        object.animations[3].tracks.splice(0, 11);
         this.scene.add(object);
         this.mixer = new THREE.AnimationMixer(object);
         this.action = this.mixer.clipAction(object.animations[0]);
         this.action2 = this.mixer.clipAction(object.animations[1]);
         this.action3 = this.mixer.clipAction(object.animations[2]);
         this.action4 = this.mixer.clipAction(object.animations[3]);
-        //console.log(object.animations[1])
         // 缩放模型大小
         this.action.play();
         this.action2.play();
         this.action3.play();
         this.action4.play();
-        this.renderee(); 
+        this.renderee();
       });
-      //添加纹理
-      //图片放置在静态文佳public中
-      //TextureLoader 加载外部图片方法
-      //
-      /* new THREE.TextureLoader().load("/favicon.ico", (texture) => {
-        this.cube.material = new THREE.MeshLambertMaterial({ map: texture });
-      }); */
       //添加平面
       let planegeometry = new THREE.PlaneGeometry(80, 70); //实例化一个平面集合体
       let planeMaterial = new THREE.MeshLambertMaterial({ color: 0x424242 }); //实例化一个cccc材质
@@ -213,7 +225,6 @@ export default {
       sbcontrolss.addEventListener("change", this.renderee); //监听鼠标、键盘事件
       addEventListener("dblclick", this.onMouseDblclick, false);
     },
-
     renderee() {
       this.renderer.render(this.scene, this.camera);
     },
@@ -233,7 +244,7 @@ export default {
       // 获取 raycaster 和所有模型相交的数组，其中的元素按照距离排序，越近的越靠前
       let intersects = this.getIntersects(event);
       //console.log(this.action.paused);
-      console.log(intersects);
+      // console.log(intersects);
       // 获取选中最近的 Mesh 对象
       if (
         intersects.length != 0 &&
@@ -256,14 +267,11 @@ export default {
             intersects[0].object.name === "fan_body003":
             this.action4.paused = !this.action4.paused;
             break;
+          case intersects[0].object.name === "Cylinder001" ||
+            intersects[0].object.name === "Box001":
+            this.threevideo=!this.threevideo;
+            break;
         }
-
-        /*         if (intersects[0].object.name === "fan_blades" ||intersects[0].object.name ==="fan_body") {
-          this.action.paused = !this.action.paused;
-        } else {
-          this.selectObject = intersects[0].object;
-          this.changeMaterial(this.selectObject);
-        } */
       } else {
         console.log("未选中 Mesh!");
       }
@@ -318,13 +326,18 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
 .info {
   position: absolute;
   top: 10px;
-  width: 100%;
-  text-align: center;
+  left: 10px;
   z-index: 100;
   display: block;
+  .videostyle {
+  border: 3px solid rgba(1, 1, 1, 0.1);
+  width: 260px;
+  height: 140px;
+}
 }
 #threed {
   width: 1000px;
