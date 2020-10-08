@@ -145,11 +145,11 @@ export default {
     },
     //多选1
     handleCheckAllChange(val) {
-      this.ruleForm.checkeduseris = val ? userOptions : [];
+      this.ruleForm.checkeduseris = val ? this.useris : [];
       this.isIndeterminate = false;
     }, //多选2
     handleCheckAllChangeO(valO) {
-      this.ruleForm.checkeduserisO = valO ? userOptionsO : [];
+      this.ruleForm.checkeduserisO = valO ? this.useris : [];
       this.isIndeterminateO = false;
     }, //多选1
     handleCheckeduserisChange(value) {

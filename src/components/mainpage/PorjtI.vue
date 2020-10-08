@@ -6,7 +6,7 @@
     </div>
     <el-upload
       class="avatar-uploader"
-      action="http://127.0.0.1:4000/api/usericon"
+      action="http://39.99.205.217:4000/api/usericon"
       name="usericon"
       :headers="heahersToken"
       :show-file-list="false"
@@ -138,7 +138,7 @@ export default {
         this.userform.companyAddress = res[0].companaddr;
         this.userform.companyName = res[0].comnpanyname;
         this.userform.projectName = res[0].projectname;
-        this.imageUrl = res[0].usericonadder;
+        this.imageUrl ="http://"+res[0].usericonadder;
     }
     },
       //获取头部token
