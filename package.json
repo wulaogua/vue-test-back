@@ -21,7 +21,7 @@
     "imports-loader": "^1.1.0",
     "intro.js": "^2.9.3",
     "lodash": "^4.17.19",
-    "three": "^0.119.1",
+    "three": "^0.125.0",
     "three-obj-mtl-loader": "^1.0.3",
     "three-orbitcontrols": "^2.110.3",
     "vue": "^2.6.10",
