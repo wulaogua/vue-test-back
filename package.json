@@ -20,7 +20,7 @@
     "hls.js": "^0.13.2",
     "imports-loader": "^1.1.0",
     "intro.js": "^2.9.3",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "three": "^0.119.1",
     "three-obj-mtl-loader": "^1.0.3",
     "three-orbitcontrols": "^2.110.3",
